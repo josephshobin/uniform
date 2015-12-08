@@ -77,7 +77,7 @@ object StandardProjectPlugin extends Plugin {
 
     /** Adds settings for crossbuilding against Scala 2.10. */
     def crossBuild = Seq(
-      crossScalaVersions := Seq(scalaVersion.value, "2.10.5"),
+      crossScalaVersions := Seq(scalaVersion.value, "2.10.6"),
       scalacOptions      := scalacOptions.value.filter(o =>
         !(scalaBinaryVersion.value == "2.10" && o == "-Ywarn-unused-import")
       )

@@ -26,7 +26,7 @@ object build extends Build {
     Defaults.coreDefaultSettings ++ Seq[Sett](
       organization := "au.com.cba.omnia"
     , sbtPlugin := true
-    , scalaVersion := "2.10.5"
+    , scalaVersion := "2.10.6"
     , scalacOptions := Seq(
         "-deprecation"
       , "-unchecked"
