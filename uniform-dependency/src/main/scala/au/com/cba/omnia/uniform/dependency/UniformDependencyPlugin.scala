@@ -212,6 +212,7 @@ object UniformDependencyPlugin extends Plugin {
       def libthrift     = "0.9.0-cdh5-3"
 
       // non-hadoop modules
+      def macroParadise = "2.1.0"
       def specs         = "3.5"
       def scalaz        = "7.1.1"  // Needs to align with what is required by specs2
       def scalazStream  = "0.7a"   // Needs to align with what is required by specs2
@@ -262,6 +263,10 @@ object UniformDependencyPlugin extends Plugin {
     def hive(version: String = versions.hive) = Seq(
       "org.apache.hive"          % "hive-exec"                      % version
     ) map noHadoop
+
+    /** Not a `Seq` since it's a compiler plugin, not a dependency */
+    def macroParadise(version: String = versions.macroParadise) =
+      "org.scalamacros"          % "paradise"                       % versions.macroParadise cross CrossVersion.full
 
     def scalaz(version: String = versions.scalaz) = Seq(
       "org.scalaz"               %% "scalaz-core"                   % version,
