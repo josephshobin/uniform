@@ -166,7 +166,7 @@ object UniformDependencyPlugin extends Plugin {
       "com.sun.jersey.contribs"      % "jersey-guice"              % "1.9",
       "org.fusesource.leveldbjni"    % "leveldbjni-all"            % "1.8",
       "asm"                          % "asm"                       % depend.versions.asm,
-      "io.netty"                     % "netty"                     % "3.6.2.Final"
+      "io.netty"                     % "netty"                     % depend.versions.netty
     )
 
     // Different versions of these jars have different organizations. Could do
@@ -210,6 +210,7 @@ object UniformDependencyPlugin extends Plugin {
       def asm           = "3.2"
       def guava         = "11.0.2"
       def jackson       = "1.8.8"
+      def netty         = "3.6.2.Final"
 
       // cloudera modules *not* on the hadoop classpath
       def hive          = "0.13.1-cdh5.3.8"
