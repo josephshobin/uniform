@@ -41,9 +41,9 @@ object StandardProjectPlugin extends Plugin {
   }
 
   object uniform {
-    def project(project: String, pkg: String) = List(
+    def project(project: String, pkg: String, org: String = "omnia") = List(
       name := project,
-      organization := "au.com.cba.omnia",
+      organization := s"au.com.cba.$org",
       rootPackage := pkg
     ) ++ scala.settings ++ versionInfoSettings
 

@@ -237,6 +237,9 @@ object UniformDependencyPlugin extends Plugin {
     def omnia(project: String, version: String, configuration: String = "compile"): Seq[ModuleID] =
       Seq("au.com.cba.omnia" %% project % version % configuration)
 
+    def zbi(project: String, version: String, configuration: String = "compile"): Seq[ModuleID] =
+      Seq("au.com.cba.zbi" %% project % version % configuration)
+
     def scaldingproject(
       hadoop: String     = versions.hadoop,
       scalding: String   = versions.scalding,
