@@ -26,6 +26,7 @@ import au.com.cba.omnia.uniform.core.version.GitInfo
 import au.com.cba.omnia.uniform.core.version.VersionInfoPlugin.{versionInfoSettings, rootPackage}
 
 object StandardProjectPlugin extends Plugin {
+
   /** Manually assign link to API pages for the specified package. */
   def assignApiUrl(classpath: Seq[Attributed[File]], organization: String, name: String, link: String): Option[(File, URL)] = {
 
@@ -41,6 +42,9 @@ object StandardProjectPlugin extends Plugin {
   }
 
   object uniform {
+    lazy val docRootUrl = SettingKey[String]("doc-root-url", "Github Pages root URL (e.g. https://commbank.github.io)")
+    lazy val docSourceUrl = SettingKey[String]("doc-source-url", "Github or Github Enterprise root URL (e.g. https://github.com/CommBank")
+
     def project(project: String, pkg: String, org: String = "omnia") = List(
       name := project,
       organization := s"au.com.cba.$org",
@@ -62,14 +66,16 @@ object StandardProjectPlugin extends Plugin {
     /** Settings to create content for github pages. Should only be use by the root project.*/
     def ghsettings: Seq[sbt.Setting[_]] =
       unidocSettings ++ site.settings ++ Seq(
+        docRootUrl    := "https://commbank.github.io",
+        docSourceUrl  := "https://github.com/CommBank",
         site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
         includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.yml",
-        apiURL <<= baseDirectory(base => Some(url(s"https://commbank.github.io/${base.getName}/latest/api"))),
-        scalacOptions in (ScalaUnidoc, unidoc) <++= (version, baseDirectory).map { (v, base) =>
+        apiURL <<= (baseDirectory, docRootUrl)((base, docRoot) => Some(url(s"$docRoot/${base.getName}/latest/api"))),
+        scalacOptions in (ScalaUnidoc, unidoc) <++= (version, baseDirectory, docSourceUrl).map { (v, base, sourceRoot) =>
           val urlSettings =
             GitInfo.commit(base).hashOption.toSeq flatMap { h =>
-            Seq("-doc-source-url", s"https://github.com/CommBank/${ base.getName }/tree/$h/€{FILE_PATH}.scala")
-          }
+              Seq("-doc-source-url", s"$sourceRoot/${ base.getName }/tree/$h/€{FILE_PATH}.scala")
+            }
 
           Seq("-sourcepath", base.getAbsolutePath) ++ urlSettings
         }
