@@ -22,6 +22,7 @@ object UniqueVersionPlugin extends Plugin {
   import Times._
   import GitInfo._
 
+  /** Appends the timestamp and commish to the specified version number. */
   def uniqueVersionSettings = Seq(
     version in ThisBuild <<= (version in ThisBuild, baseDirectory) { (v, d) => v + "-" + timestamp(now) + "-" + commish(d).show }
   )
