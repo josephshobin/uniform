@@ -47,10 +47,10 @@ it should look like this:
 ```
 version in ThisBuild := "0.0.1"
 
-uniqueVersionSettings
+localVersionSettings
 ```
 
-This will generate a unique build, consisiting of `${version}-${timestamp}-${commish}`.
+This will append `-SNAPSHOT` to the version number. The CI builds overwrite the version with a unique version at build time.
 
 
 `uniform` flavours provide additional pre-canned configs for `assembly`, `thrift` and consistent dependency versions.

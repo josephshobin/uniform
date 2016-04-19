@@ -12,8 +12,14 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-version in ThisBuild := "1.9.0"
+package au.com.cba.omnia.uniform.core
+package version
 
-uniqueVersionSettings
+import sbt._, Keys._
 
-licenses := Seq("Apache License, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+object LocalVersionPlugin extends Plugin {
+  /** Appends `-SNAPSHOT` to the version. */
+  def localVersionSettings = Seq(
+    version in ThisBuild <<= (version in ThisBuild)(v => s"$v-SNAPSHOT")
+  )
+}
