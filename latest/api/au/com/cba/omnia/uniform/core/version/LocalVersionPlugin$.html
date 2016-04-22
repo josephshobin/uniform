@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>UniqueVersionPlugin - au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin</title>
-          <meta name="description" content="UniqueVersionPlugin - au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin" />
-          <meta name="keywords" content="UniqueVersionPlugin au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin" />
+          <title>LocalVersionPlugin - au.com.cba.omnia.uniform.core.version.LocalVersionPlugin</title>
+          <meta name="description" content="LocalVersionPlugin - au.com.cba.omnia.uniform.core.version.LocalVersionPlugin" />
+          <meta name="keywords" content="LocalVersionPlugin au.com.cba.omnia.uniform.core.version.LocalVersionPlugin" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../../index.html';
-            var hash = 'au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin$';
+            var hash = 'au.com.cba.omnia.uniform.core.version.LocalVersionPlugin$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../../../../../../../lib/object_big.png" />
         <p id="owner"><a href="../../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../../package.html" class="extype" name="au.com">com</a>.<a href="../../../../package.html" class="extype" name="au.com.cba">cba</a>.<a href="../../../package.html" class="extype" name="au.com.cba.omnia">omnia</a>.<a href="../../package.html" class="extype" name="au.com.cba.omnia.uniform">uniform</a>.<a href="../package.html" class="extype" name="au.com.cba.omnia.uniform.core">core</a>.<a href="package.html" class="extype" name="au.com.cba.omnia.uniform.core.version">version</a></p>
-        <h1>UniqueVersionPlugin</h1>
+        <h1>LocalVersionPlugin</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,11 +35,11 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">UniqueVersionPlugin</span><span class="result"> extends <span class="extype" name="sbt.Plugin">Plugin</span></span>
+        <span class="name">LocalVersionPlugin</span><span class="result"> extends <span class="extype" name="sbt.Plugin">Plugin</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/uniform/blob/master//uniform-core/src/main/scala/au/com/cba/omnia/uniform/core/version/UniqueVersionPlugin.scala" target="_blank">UniqueVersionPlugin.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/uniform/blob/master//uniform-core/src/main/scala/au/com/cba/omnia/uniform/core/version/LocalVersionPlugin.scala" target="_blank">LocalVersionPlugin.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="sbt.Plugin">Plugin</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -59,7 +59,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin"><span>UniqueVersionPlugin</span></li><li class="in" name="sbt.Plugin"><span>Plugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.com.cba.omnia.uniform.core.version.LocalVersionPlugin"><span>LocalVersionPlugin</span></li><li class="in" name="sbt.Plugin"><span>Plugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -292,6 +292,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.com.cba.omnia.uniform.core.version.LocalVersionPlugin#localVersionSettings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="localVersionSettings:Seq[sbt.Def.Setting[String]]"></a>
+      <a id="localVersionSettings:Seq[sbt.Def.Setting[String]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">localVersionSettings</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.collection.Seq" class="extype" target="_top">Seq</a>[<span class="extype" name="sbt.Init.Setting">sbt.Def.Setting</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Appends <code>-SNAPSHOT</code> to the version.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -450,22 +463,6 @@
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 0.12.0)</i> Override projectSettings or buildSettings instead.</p></dd></dl></div>
-    </li><li name="au.com.cba.omnia.uniform.core.version.UniqueVersionPlugin#uniqueVersionSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="uniqueVersionSettings:Seq[sbt.Def.Setting[String]]"></a>
-      <a id="uniqueVersionSettings:Seq[sbt.Def.Setting[String]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.9.0) This will be removed in future versions since we use the CI to set the version number. Please use localVersionSettings instead.">uniqueVersionSettings</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.collection.Seq" class="extype" target="_top">Seq</a>[<span class="extype" name="sbt.Init.Setting">sbt.Def.Setting</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Appends the timestamp and commish to the specified version number.</p><div class="fullcomment"><div class="comment cmt"><p>Appends the timestamp and commish to the specified version number.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.9.0)</i> This will be removed in future versions since we use the CI to set the version number. Please use <code>localVersionSettings</code> instead.</p></dd></dl></div>
     </li></ol>
             </div>
         </div>
