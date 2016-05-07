@@ -22,7 +22,7 @@ import au.com.cba.omnia.uniform.core.scala.Scala
 
 object ScalaSettings extends Plugin {
   object scala {
-    def settings = Seq(
+    def settings(jvmVersion: String = Scala.jvmVersion) = Seq(
       scalaVersion := Scala.version,
       crossScalaVersions := Seq(Scala.version),
       scalacOptions ++= Seq(
@@ -34,14 +34,14 @@ object ScalaSettings extends Plugin {
         "-Ywarn-unused-import",
         "-feature",
         "-language:_",
-        "-target:jvm-1.7"
+        s"-target:jvm-${jvmVersion}"
       ),
       scalacOptions in (Compile, console) ~= (_.filterNot(Set("-Ywarn-unused-import"))),
       scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
       javacOptions ++= Seq(
         "-Xlint:unchecked",
-        "-source", "1.7",
-        "-target", "1.7"
+        "-source", jvmVersion,
+        "-target", jvmVersion
       )
     )
   }
