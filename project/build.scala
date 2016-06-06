@@ -76,7 +76,7 @@ object build extends Build {
   , base = file("uniform-assembly")
   , settings = standardSettings ++ Seq[Sett](
       name := "uniform-assembly"
-    , addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.13.0")
+    , addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.3")
     )
   )
 
