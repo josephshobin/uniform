@@ -19,15 +19,13 @@ import sbtassembly.AssemblyPlugin.autoImport._
 import sbtassembly.MergeStrategy
 
 object UniformAssemblyPlugin extends Plugin {
-  def uniformAssemblySettings: Seq[Sett] =
-    baseAssemblySettings ++ Seq[Sett](
+  def uniformAssemblySettings: Seq[Sett] = Seq(
       assemblyMergeStrategy in assembly <<= (assemblyMergeStrategy in assembly)(defaultMergeStrategy),
       test in assembly := {},
       artifact in (Compile, assembly) ~= { art =>
         art.copy(`classifier` = Some("assembly"))
       }
     ) ++ addArtifact(artifact in (Compile, assembly), assembly)
-
 
   def defaultMergeStrategy(old: String => MergeStrategy) =  (path: String) => path match {
     case "META-INF/LICENSE" => MergeStrategy.rename
@@ -42,5 +40,4 @@ object UniformAssemblyPlugin extends Plugin {
     case PathList("META-INF", xs) if xs.toLowerCase.endsWith(".sf") => MergeStrategy.discard
     case _ => MergeStrategy.first
   }
-
 }

@@ -15,6 +15,8 @@ An sbt plugin for maintaining uniform approach to building cba components.
 usage
 -----
 
+Supported: sbt 0.13.6 or higher (same as [sbt-assembly](https://github.com/sbt/sbt-assembly#using-published-plugin)).
+
 See https://commbank.github.io/uniform/index.html for the latest version number.
 
 `uniform` helps provide a consistent set of scala settings across projects.
