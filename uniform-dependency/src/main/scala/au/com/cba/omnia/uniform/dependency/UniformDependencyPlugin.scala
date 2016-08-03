@@ -274,7 +274,7 @@ object UniformDependencyPlugin extends Plugin {
 
     /** Not a `Seq` since it's a compiler plugin, not a dependency */
     def macroParadise(version: String = versions.macroParadise) =
-      "org.scalamacros"          % "paradise"                       % versions.macroParadise cross CrossVersion.full
+      "org.scalamacros"          % "paradise"                       % version cross CrossVersion.full
 
     def scalaz(version: String = versions.scalaz) = Seq(
       "org.scalaz"               %% "scalaz-core"                   % version,
