@@ -8,13 +8,14 @@ cache:
   - $HOME/.m2
 install:
 - curl https://commbank.artifactoryonline.com/commbank/binaries/ci/ci-$CI_VERSION.tar.gz | tar xz
+- cp .ci/sbt-ci-build-doc-simple.sh ci/
 - ci/sbt-ci-setup.sh
 - ci/sbt-ci-setup-version.sh
 - cp /etc/sbt/sbtopts .sbtopts; echo "-Dsbt.global.base=$TRAVIS_BUILD_DIR/ci" >> .sbtopts
 script:
 - sbt test package scripted
   && ci/sbt-ci-deploy.sh ivy http://commbank.artifactoryonline.com/commbank ext-releases-local-ivy
-  && ci/sbt-ci-build-doc.sh https://commbank.github.io/ https://github.com/CommBank/uniform/
+  && ci/sbt-ci-build-doc-simple.sh
   && ci/ci-push-branch.sh gh-pages
 after_script:
 - rm -rf ci
