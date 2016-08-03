@@ -7,19 +7,23 @@ cache:
   - $HOME/.ivy2
   - $HOME/.m2
 install:
-- git clone https://github.com/CommBank/ci.git
-- chmod ugo+x ci/*
-- ci/sbt-setup.sh
-- ci/sbt-setup-version.sh
+- curl https://commbank.artifactoryonline.com/commbank/binaries/ci/ci-$CI_VERSION.tar.gz | tar xz
+- ci/sbt-ci-setup.sh
+- ci/sbt-ci-setup-version.sh
+- cp /etc/sbt/sbtopts .sbtopts; echo "-Dsbt.global.base=$TRAVIS_BUILD_DIR/ci" >> .sbtopts
 script:
-- sbt -Dsbt.global.base=$TRAVIS_BUILD_DIR/ci '; test; package; scripted' && ci/sbt-deploy-ivy.sh
-  && ci/sbt-gh-pages-ssh.sh
+- sbt test package scripted
+  && ci/sbt-ci-deploy.sh ivy http://commbank.artifactoryonline.com/commbank ext-releases-local-ivy
+  && ci/sbt-ci-build-doc.sh https://commbank.github.io/ https://github.com/CommBank/uniform/
+  && ci/ci-push-branch.sh gh-pages
 after_script:
 - rm -rf ci
 - find $HOME/.ivy2 -name "*uniform*" -delete
 env:
   global:
-    secure: dm4u6NLrqr7bQbr1PWAlsDYnS4lK+gPWvWlga94PWZieh80/CS63KPkD6HOcIwlPBiXd9z2w/E3BBf5fFtAl0ykyYfg9vSzDY87BDZMQjrZv5BuMuedejzWGpS7nMSQDSuw/Y9lsWqbmCVTxkZyeRggUUmYbdC111dk+U2/tKu0=
+  - CI_VERSION=3.2.3-20160803030038-a6a90e2
+  - secure: gRyNyPY1Z/nk1rvf5gP3QCG0D0/u9rChVn4n9/gBUSCVM1CD7PD3JPq8mPDoBp8s6A7d92ubKjCYB+4ZtJr9xiGEajTWb4cF9u4U2HPN1uRdNQcH3UypKG++rk4eWifqQ0rYs84GtmRrvB/JD75dpjqulFxqXwBzwZPJT95Ky5I=
+  - secure: Gl5MkAv89lDsBAYUJcXfAEpjqjVSicj+Ux6nx/UnXbzkniPosZ+6isuMbF1wBZebgspTWmrqegt4ivuCY15HSqOx9/4JwHsZuqEI73RkgMmo75Oo7uRFAXGT5tqMxUvhijcCwSGc1zGlXV6o2Uz6FIuboIGXMOhhlWsPpfSvZvo=
 before_install:
 - openssl aes-256-cbc -K $encrypted_3dcda697bb71_key -iv $encrypted_3dcda697bb71_iv
-  -in .travis/deploy-key.enc -out .travis/deploy-key.pem -d
+  -in .ci/deploy-key.enc -out .ci/deploy-key.pem -d
