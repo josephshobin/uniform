@@ -81,7 +81,7 @@ uniform.project("project-name", "root.package")
 
 uniformThriftSettings
 
-uniformAssemblySettings
+uniformAssemblySettings(splitPackageDeps = true)
 ```
 
 `version.sbt`

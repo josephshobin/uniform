@@ -19,13 +19,33 @@ import sbtassembly.AssemblyPlugin.autoImport._
 import sbtassembly.MergeStrategy
 
 object UniformAssemblyPlugin extends Plugin {
-  def uniformAssemblySettings: Seq[Sett] = Seq(
+  /** Adds an assembly artifact that includes all dependencies. */
+  def uniformAssemblySettings: Seq[Sett] = uniformAssemblySettings(splitPackageDeps = false)
+
+  /** Adds an assembly that includes all dependencies, optionally split into two assemblies (thin and deps). */
+  def uniformAssemblySettings(splitPackageDeps: Boolean = false): Seq[Sett] = Seq(
       assemblyMergeStrategy in assembly <<= (assemblyMergeStrategy in assembly)(defaultMergeStrategy),
-      test in assembly := {},
-      artifact in (Compile, assembly) ~= { art =>
-        art.copy(`classifier` = Some("assembly"))
-      }
-    ) ++ addArtifact(artifact in (Compile, assembly), assembly)
+      test in assembly := {}
+    ) ++ (
+      if (splitPackageDeps) splitAssemblySettings
+      else Seq(artifact in (Compile, assembly) ~= { _.copy(`classifier` = Some("assembly")) })
+    ) ++
+    addArtifact(artifact in (Compile, assembly), assembly)
+
+  /** Don't use this directly, instead use `uniformAssemblySettings(splitPackageDeps = true`) */
+  def splitAssemblySettings: Seq[Sett] =
+    Seq(assemblyOption in assembly ~= { _.copy(includeScala = false, includeDependency = false) }) ++
+    classifierNamingSettings("thin", assembly) ++
+    classifierNamingSettings("deps", assemblyPackageDependency) ++
+    addArtifact(artifact in (Compile, assemblyPackageDependency), assemblyPackageDependency)
+
+  // Set a classifier and corresponding jarName for an assembly, overriding the the sbt-assembly naming.
+  def classifierNamingSettings(aClassifier: String, anAssembly: TaskKey[File]) = Seq(
+    artifact in (Compile, anAssembly) ~= { _.copy(`classifier` = Some(aClassifier)) },
+    assemblyJarName in anAssembly <<= (name, scalaBinaryVersion, version) map {
+      (nm, sv, ver) => s"${nm}_${sv}-${ver}-${aClassifier}.jar"
+    }
+  )
 
   def defaultMergeStrategy(old: String => MergeStrategy) =  (path: String) => path match {
     case "META-INF/LICENSE" => MergeStrategy.rename
