@@ -218,7 +218,7 @@ object UniformDependencyPlugin extends Plugin {
 
       // non-hadoop modules
       def macroParadise = "2.1.0"
-      def specs         = "3.5"
+      def specs         = "3.6"
       def scalaz        = "7.1.1"  // Needs to align with what is required by specs2
       def scalazStream  = "0.7a"   // Needs to align with what is required by specs2
       def shapeless     = "2.2.5"
