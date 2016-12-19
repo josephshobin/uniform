@@ -32,7 +32,7 @@ addSbtPlugin("au.com.cba.omnia" % "uniform-core" % "$VERSION$")
 Almost all functionality, is included by using the `uniform.project` command.
 
 ```
-  uniform.project("project-name", "root.package")
+  uniform.project("project-name", "project.root.package")
 ```
 
 A concrete example might be:
@@ -54,6 +54,7 @@ localVersionSettings
 
 This will append `-SNAPSHOT` to the version number. The CI builds overwrite the version with a unique version at build time.
 
+Uniform’s core [VersionInfoPlugin](https://github.com/CommBank/uniform/blob/master/uniform-core/src/main/scala/au/com/cba/omnia/uniform/core/version/VersionInfoPlugin.scala) generates a Scala object named `VersionInfo` in your `project.root.package` with the build’s version number, Git commit and date strings (see complete example below).
 
 `uniform` flavours provide additional pre-canned configs for `assembly`, `thrift` and consistent dependency versions.
 
@@ -89,7 +90,23 @@ uniformAssemblySettings(splitPackageDeps = true)
 ```
 version in ThisBuild := "0.0.1"
 
-uniqueVersionSettings
+localVersionSettings
+```
+
+`src/main/scala/project/root/package/Main.scala`
+
+```
+package project.root.package
+
+object Main extends App {
+  println(s"=== ${getClass.getSimpleName} === ${VersionInfo.verbose} ===")
+}
+```
+
+`sbt run`
+
+```
+=== Main$ === 0.0.1-SNAPSHOT-20161219024858-1afb454 ===
 ```
 
 assemblies
@@ -98,7 +115,7 @@ assemblies
 By default, the `assembly` task creates a fat JAR of your project with all its dependencies.
 In the past, split JARs have only been possible using `assemblyPackageDependency` and `assemblyOption`
 (see [sbt-assembly: Splitting your project and deps JARs](https://github.com/sbt/sbt-assembly#splitting-your-project-and-deps-jars)).
-As of version 1.13.0 (December 2016), `uniform-assembly` supports a convenience option for `uniformAssemblySettings`
+As of version 1.13.0 (December 2016), `uniform-assembly` supports a convenience option for doing this with `uniformAssemblySettings`
 (see [UniformAssemblyPlugin.scala](https://github.com/CommBank/uniform/blob/master/uniform-assembly/src/main/scala/au/com/cba/omnia/uniform/assembly/UniformAssemblyPlugin.scala) for details):
 
 

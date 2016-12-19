@@ -36,6 +36,7 @@ object VersionInfoPlugin extends Plugin {
            |  val version = "$version"
            |  val git     = "${commit(base).show}"
            |  val date    = "${timestamp(now)}"
+           |  val verbose = s"$$version-$$date-$${git.take(7)}"
            |}""".stripMargin
       )
 
