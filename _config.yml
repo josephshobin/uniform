@@ -1,0 +1,5 @@
+name: uniform
+exclude: [Gemfile]
+markdown: kramdown
+
+releaseVersion: 1.14.1-20161219084117-b6341c6
