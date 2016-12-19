@@ -92,6 +92,44 @@ version in ThisBuild := "0.0.1"
 uniqueVersionSettings
 ```
 
+assemblies
+----------
+
+By default, the `assembly` task creates a fat JAR of your project with all its dependencies.
+In the past, split JARs have only been possible using `assemblyPackageDependency` and `assemblyOption`
+(see [sbt-assembly: Splitting your project and deps JARs](https://github.com/sbt/sbt-assembly#splitting-your-project-and-deps-jars)).
+As of version 1.13.0 (December 2016), `uniform-assembly` supports a convenience option for `uniformAssemblySettings`
+(see [UniformAssemblyPlugin.scala](https://github.com/CommBank/uniform/blob/master/uniform-assembly/src/main/scala/au/com/cba/omnia/uniform/assembly/UniformAssemblyPlugin.scala) for details):
+
+
+| Configuration in `build.sbt`                         | `assembly` output                              | `assemblyPackageDependency` output |
+| ---------------------------------------------------- | ---------------------------------------------- | ---------------------------------- |
+| `uniformAssemblySettings` (past and current default) | Fat jar with project and dependencies (`.jar`) | Dependencies only (`-deps.jar`)    |
+| `uniformAssemblySettings(splitPackageDeps = false)`  | As above                                       | As above                           |
+| `uniformAssemblySettings(splitPackageDeps = true)`   | Project only (`-thin.jar`)                     | As above                           |
+
+Default usage with `uniformAssemblySettings(splitPackageDeps = false)`:
+
+    sbt> assembly
+    ...
+    [info] Packaging ./target/scala-2.11/project-name-assembly-0.0.1-SNAPSHOT.jar ...
+    ...
+    sbt> assemblyPackageDependency
+    ...
+    [info] Packaging ./target/scala-2.11/project-name-assembly-0.0.1-SNAPSHOT-deps.jar ...
+
+Optional usage with `uniformAssemblySettings(splitPackageDeps = true)`:
+
+    sbt> assembly
+    ...
+    [info] Packaging ./target/scala-2.11/project-name_2.11-0.0.1-SNAPSHOT-thin.jar ...
+    ...
+    sbt> assemblyPackageDependency
+    ...
+    [info] Packaging ./target/scala-2.11/project-name_2.11-0.0.1-SNAPSHOT-deps.jar ...
+
+In this case, the `deps` jar can be passed to [Hadoop’s `-libjars`](https://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/CommandsManual.html#Generic_Options) option to avoid unjarring the dependencies in a traditional fat assembly.
+
 docs
 ----
 
