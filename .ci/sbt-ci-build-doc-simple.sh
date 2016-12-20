@@ -31,10 +31,7 @@ CI_Env_Adapt $(CI_Env_Get)
 
 SBT=$(which_sbt) || exit 1
 
-version=$(Version_Get "$(cat version.sbt)")
-if [ -z $version ]; then
-    exit 1
-fi
+version=$(Version_Get)
 
 if [ ! -e src/site/_config.yml ]; then
     echo "src/site/_config.yml does not exist. Aborting."

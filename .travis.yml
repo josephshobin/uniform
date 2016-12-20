@@ -22,7 +22,7 @@ after_script:
 - find $HOME/.ivy2 -name "*uniform*" -delete
 env:
   global:
-  - CI_VERSION=3.2.3-20160803030038-a6a90e2
+  - CI_VERSION=3.3.1-20161112085142-c2c258a
   - secure: gRyNyPY1Z/nk1rvf5gP3QCG0D0/u9rChVn4n9/gBUSCVM1CD7PD3JPq8mPDoBp8s6A7d92ubKjCYB+4ZtJr9xiGEajTWb4cF9u4U2HPN1uRdNQcH3UypKG++rk4eWifqQ0rYs84GtmRrvB/JD75dpjqulFxqXwBzwZPJT95Ky5I=
   - secure: Gl5MkAv89lDsBAYUJcXfAEpjqjVSicj+Ux6nx/UnXbzkniPosZ+6isuMbF1wBZebgspTWmrqegt4ivuCY15HSqOx9/4JwHsZuqEI73RkgMmo75Oo7uRFAXGT5tqMxUvhijcCwSGc1zGlXV6o2Uz6FIuboIGXMOhhlWsPpfSvZvo=
 before_install:
