@@ -224,12 +224,12 @@ object UniformDependencyPlugin extends Plugin {
       def shapeless     = "2.2.5"
       def scalacheck    = "1.11.4" // Downgrade to a version that works with both specs2 and scalaz
       def nscalaTime    = "2.10.0"
-      def jodaTime      = "2.9.2"    // Needs to align with what is required by nscala-time
+      def jodaTime      = "2.9.2"  // Needs to align with what is required by nscala-time
       def scalding      = "0.16.0"
       def cascading     = "2.6.1"  // Needs to align with what is required by scalding
       def algebird      = "0.12.0" // Needs to align with what is required by scalding
       def scrooge       = "3.17.0" // Needs to align with what is required by scalding
-      def bijection     = "0.7.2-OMNIA1" // Needs to align with what is required by scalding
+      def bijection     = "0.9.1"  // Needs to align with what is required by scalding
       def scallop       = "0.9.5"
       def objenesis     = "1.2"
     }
