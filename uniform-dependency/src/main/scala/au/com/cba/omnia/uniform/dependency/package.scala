@@ -14,6 +14,10 @@
 
 package au.com.cba.omnia.uniform
 
+import sbt.ModuleID
+
 package object dependency {
   type Sett = sbt.Def.Setting[_]
+
+  implicit def moduleIdDToModuleIDOps(m: ModuleID) = new ModuleIDOps(m)
 }

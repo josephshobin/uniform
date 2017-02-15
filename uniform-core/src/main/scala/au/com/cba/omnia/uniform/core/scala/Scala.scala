@@ -14,8 +14,14 @@
 
 package au.com.cba.omnia.uniform.core.scala
 
-object Scala {
+object Scala11  {
   val version       = "2.11.8"
   val binaryVersion = version.substring(0, version.lastIndexOf('.'))
   val jvmVersion    = "1.7"
+}
+
+object Scala12 {
+  val version       = "2.12.1"
+  val binaryVersion = version.substring(0, version.lastIndexOf('.'))
+  val jvmVersion    = "1.8"
 }

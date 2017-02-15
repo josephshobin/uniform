@@ -18,13 +18,16 @@ package setting
 import sbt._
 import Keys._
 
-import au.com.cba.omnia.uniform.core.scala.Scala
+import au.com.cba.omnia.uniform.core.scala.{Scala11, Scala12}
 
 object ScalaSettings extends Plugin {
   object scala {
-    def settings(jvmVersion: String = Scala.jvmVersion) = Seq(
-      scalaVersion := Scala.version,
-      crossScalaVersions := Seq(Scala.version),
+    def settings(jvmVersion: String = Scala11.jvmVersion) = settings11(jvmVersion)
+
+    /** Scala 2.11 settings. */
+    def settings11(jvmVersion: String = Scala11.jvmVersion) = Seq(
+      scalaVersion := Scala11.version,
+      crossScalaVersions := Seq(Scala11.version),
       scalacOptions ++= Seq(
         "-deprecation",
         "-unchecked",
@@ -32,6 +35,31 @@ object ScalaSettings extends Plugin {
         "-Ywarn-dead-code",
         "-Ywarn-value-discard",
         "-Ywarn-unused-import",
+        "-feature",
+        "-language:_",
+        s"-target:jvm-${jvmVersion}"
+      ),
+      scalacOptions in (Compile, console) ~= (_.filterNot(Set("-Ywarn-unused-import"))),
+      scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+      javacOptions ++= Seq(
+        "-Xlint:unchecked",
+        "-source", jvmVersion,
+        "-target", jvmVersion
+      )
+    )
+
+    /** Scala 2.12 settings. */
+    def settings12(jvmVersion: String = Scala12.jvmVersion) = Seq(
+      scalaVersion := Scala12.version,
+      crossScalaVersions := Seq(Scala12.version),
+      scalacOptions ++= Seq(
+        "-deprecation",
+        "-unchecked",
+        "-Xlint",
+        "-Ywarn-dead-code",
+        "-Ywarn-value-discard",
+        "-Ywarn-unused-import",
+        "-Ypartial-unification",
         "-feature",
         "-language:_",
         s"-target:jvm-${jvmVersion}"

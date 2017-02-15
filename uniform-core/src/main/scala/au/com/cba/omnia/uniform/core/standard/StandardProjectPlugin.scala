@@ -21,7 +21,7 @@ import sbtunidoc.Plugin._, UnidocKeys._
 
 import com.typesafe.sbt.SbtSite._, SiteKeys._
 
-import au.com.cba.omnia.uniform.core.scala.Scala
+import au.com.cba.omnia.uniform.core.scala.{Scala11, Scala12}
 import au.com.cba.omnia.uniform.core.setting.ScalaSettings.scala
 import au.com.cba.omnia.uniform.core.version.GitInfo
 import au.com.cba.omnia.uniform.core.version.VersionInfoPlugin.{versionInfoSettings, rootPackage}
@@ -46,11 +46,22 @@ object StandardProjectPlugin extends Plugin {
     lazy val docRootUrl = SettingKey[String]("doc-root-url", "Github Pages root URL (e.g. https://commbank.github.io)")
     lazy val docSourceUrl = SettingKey[String]("doc-source-url", "Github or Github Enterprise root URL (e.g. https://github.com/CommBank")
 
-    def project(project: String, pkg: String, org: String = "omnia", jvmVersion: String = Scala.jvmVersion) = List(
+    def project(project: String, pkg: String, org: String = "omnia", jvmVersion: String = Scala11.jvmVersion) =
+      project11(project, pkg, org, jvmVersion)
+
+    def project11(project: String, pkg: String, org: String = "omnia", jvmVersion: String = Scala11.jvmVersion) = List(
       name := project,
       organization := s"au.com.cba.$org",
       rootPackage := pkg
-    ) ++ scala.settings(jvmVersion = jvmVersion) ++ versionInfoSettings
+    ) ++ scala.settings11(jvmVersion = jvmVersion) ++ versionInfoSettings
+
+
+    def project12(project: String, pkg: String, org: String = "omnia", jvmVersion: String = Scala12.jvmVersion) = List(
+      name := project,
+      organization := s"au.com.cba.$org",
+      rootPackage := pkg
+    ) ++ scala.settings12(jvmVersion = jvmVersion) ++ versionInfoSettings
+
 
     /** Settings for each sbt project and subproject to create api mappings and expose api url.*/
     def docSettings(link: String): Seq[sbt.Setting[_]] = Seq(
