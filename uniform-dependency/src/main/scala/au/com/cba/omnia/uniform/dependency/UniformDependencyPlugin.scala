@@ -16,6 +16,7 @@ package au.com.cba.omnia.uniform.dependency
 
 import sbt._, Keys._
 
+import au.com.cba.omnia.uniform.core.scala
 import au.com.cba.omnia.uniform.core.scala.Scala
 
 object UniformDependencyPlugin extends Plugin {
@@ -191,6 +192,7 @@ object UniformDependencyPlugin extends Plugin {
         .map(m => ExclusionRule(m.organization, m.name))
   }
 
+  @deprecated("""Use exclude("org.mypkg", s"mypkg_${scalaBinaryVersion.value}") instead. This is hard coded to what ever version Scala.binaryVersion is currently""", "1.15.0")
   def sv(module: String): String = s"${module}_${Scala.binaryVersion}"
 
   object depend {
@@ -283,7 +285,7 @@ object UniformDependencyPlugin extends Plugin {
 
     def scalazStream(version: String = versions.scalazStream) = Seq(
       // Exclude scalaz since the versions are different
-      "org.scalaz.stream"        %% "scalaz-stream"                 % version exclude("org.scalaz", sv("scalaz-core")) exclude("org.scalaz", sv("scalaz-concurrent"))
+      "org.scalaz.stream"        %% "scalaz-stream"                 % version scalaExcludeAll("org.scalaz", "scalaz-core") scalaExcludeAll("org.scalaz", "scalaz-concurrent")
     )
 
     def shapeless(version: String = versions.shapeless) = Seq(
@@ -296,9 +298,9 @@ object UniformDependencyPlugin extends Plugin {
       configuration: String = "test"
     ) = Seq(
       "org.specs2"               %% "specs2-core"                   % specs       % configuration exclude("org.ow2.asm", "asm"),
-      "org.specs2"               %% "specs2-scalacheck"             % specs       % configuration exclude("org.ow2.asm", "asm") exclude("org.scalacheck", sv("scalacheck")),
-      "org.scalacheck"           %% "scalacheck"                    % scalacheck  % configuration exclude("org.scala-lang.modules", sv("scala-parser-combinators")),
-      "org.scalaz"               %% "scalaz-scalacheck-binding"     % scalaz      % configuration exclude("org.scalacheck", sv("scalacheck")),
+      "org.specs2"               %% "specs2-scalacheck"             % specs       % configuration exclude("org.ow2.asm", "asm") scalaExcludeAll("org.scalacheck", "scalacheck"),
+      "org.scalacheck"           %% "scalacheck"                    % scalacheck  % configuration scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators"),
+      "org.scalaz"               %% "scalaz-scalacheck-binding"     % scalaz      % configuration scalaExcludeAll("org.scalacheck", "scalacheck"),
       "asm"                      %  "asm"                           % asm         % configuration
     )
 
@@ -308,7 +310,7 @@ object UniformDependencyPlugin extends Plugin {
     )
 
     def scalding(scalding: String = versions.scalding, algebird: String = versions.algebird, bijection: String = versions.bijection) = Seq(
-      noHadoop("com.twitter"     %% "scalding-core"                 % scalding exclude("com.twitter", sv("bijection-core"))),
+      noHadoop("com.twitter"     %% "scalding-core"                 % scalding scalaExcludeAll("com.twitter", "bijection-core")),
       "com.twitter"              %% "algebird-core"                 % algebird,
       "com.twitter"              %% "bijection-core"                % bijection
     )
@@ -325,7 +327,7 @@ object UniformDependencyPlugin extends Plugin {
 
     def scrooge(scrooge: String = versions.scrooge, bijection: String = versions.bijection) = Seq(
       "com.twitter"              %% "scrooge-core"                  % scrooge,
-      "com.twitter"              %% "bijection-scrooge"             % bijection exclude("com.twitter", sv("scrooge-core"))
+      "com.twitter"              %% "bijection-scrooge"             % bijection scalaExcludeAll("com.twitter", "scrooge-core")
     ) map noHadoop
 
     def parquet(version: String = versions.parquet) = Seq(
