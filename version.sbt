@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-version in ThisBuild := "1.15.0"
+version in ThisBuild := "1.15.1"
 
 version in ThisBuild <<= (version in ThisBuild)(v => s"$v-SNAPSHOT") // We can't use LocalVersionPlugin here.
 

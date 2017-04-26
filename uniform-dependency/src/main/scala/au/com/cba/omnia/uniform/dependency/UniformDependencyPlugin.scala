@@ -230,7 +230,7 @@ object UniformDependencyPlugin extends Plugin {
       def scalding      = "0.16.0"
       def cascading     = "2.6.1"  // Needs to align with what is required by scalding
       def algebird      = "0.12.0" // Needs to align with what is required by scalding
-      def scrooge       = "3.17.0" // Needs to align with what is required by scalding
+      def scrooge       = "3.20.0" // Needs to align with what is required by scalding
       def bijection     = "0.9.1"  // Needs to align with what is required by scalding
       def scallop       = "0.9.5"
       def objenesis     = "1.2"
