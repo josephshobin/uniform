@@ -136,7 +136,7 @@ object UniformDependencyPlugin extends Plugin {
       "org.apache.httpcomponents"    % "httpcore"                  % "4.2.5",
       "org.apache.avro"              % "avro"                      % depend.versions.avro,
       "org.apache.zookeeper"         % "zookeeper"                 % depend.versions.zookeeper,
-      "com.google.code.findbugs"     % "jsr305"                    % "1.3.9",
+      "com.google.code.findbugs"     % "jsr305"                    % "3.0.0",
       "com.google.guava"             % "guava"                     % depend.versions.guava,
       "com.google.protobuf"          % "protobuf-java"             % "2.5.0",
       "com.google.inject"            % "guice"                     % "3.0",
@@ -198,12 +198,12 @@ object UniformDependencyPlugin extends Plugin {
   object depend {
     object versions {
       // cloudera modules
-      def hadoop        = "2.5.0-mr1-cdh5.3.8"
-      def hadoopNoMr1   = "2.5.0-cdh5.3.8"
+      def hadoop        = "2.6.0-mr1-cdh5.13.1"
+      def hadoopNoMr1   = "2.6.0-cdh5.13.1"
       def parquet       = "1.5.0-cdh5.3.8"
       def parquetFormat = "2.1.0-cdh5.3.8"
-      def avro          = "1.7.6-cdh5.3.8"
-      def zookeeper     = "3.4.5-cdh5.3.8"
+      def avro          = "1.7.6-cdh5.13.1"
+      def zookeeper     = "3.4.5-cdh5.13.1"
       def jetty         = "6.1.26.cloudera.4"
 
       // other modules in the hadoop classpath
