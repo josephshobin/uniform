@@ -203,8 +203,8 @@ object UniformDependencyPlugin extends Plugin {
       // cloudera modules
       def hadoop        = "2.6.0-mr1-cdh5.13.1"
       def hadoopNoMr1   = "2.6.0-cdh5.13.1"
-      def parquet       = "1.5.0-cdh5.3.8"
-      def parquetFormat = "2.1.0-cdh5.3.8"
+      def parquet       = "1.5.0-cdh5.13.1"
+      def parquetFormat = "2.1.0-cdh5.13.1"
       def avro          = "1.7.6-cdh5.13.1"
       def zookeeper     = "3.4.5-cdh5.13.1"
       def jetty         = "6.1.26.cloudera.4"
