@@ -71,6 +71,9 @@ object UniformDependencyPlugin extends Plugin {
     // cascading-hive (hive-exec) and sqoop vs. avro-mapred
     dependencyOverrides += "org.apache.velocity" % "velocity"  % "1.7",
 
+    // depend.hive (hive-exec) vs. depend.scalding (cascading-core)
+    dependencyOverrides += "org.codehaus.janino" % "janino"  % "2.7.6",
+
     // override the jackson-mapper jar versions, to workaround a dependency on the
     // non-hadoop version of these jars being added to the internal ivy configurations,
     // which I haven't figured out how to prevent
@@ -215,7 +218,7 @@ object UniformDependencyPlugin extends Plugin {
       def netty         = "3.6.2.Final"
 
       // cloudera modules *not* on the hadoop classpath
-      def hive          = "0.13.1-cdh5.3.8"
+      def hive          = "1.1.0-cdh5.13.1"
       def libthrift     = "0.9.0-cdh5-3"
 
       // non-hadoop modules
