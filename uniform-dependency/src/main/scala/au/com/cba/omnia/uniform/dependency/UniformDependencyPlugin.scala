@@ -77,11 +77,15 @@ object UniformDependencyPlugin extends Plugin {
     // depend.hive (hive-exec) vs. depend.time (joda-time)
     dependencyOverrides += "joda-time" % "joda-time"  % depend.versions.jodaTime,
 
+    // depend.hive (hive-exec) vs. sqoop
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind"    % depend.versions.jacksonV2,
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % depend.versions.jacksonV2,
+
     // override the jackson-mapper jar versions, to workaround a dependency on the
     // non-hadoop version of these jars being added to the internal ivy configurations,
     // which I haven't figured out how to prevent
-    dependencyOverrides += "org.codehaus.jackson" % "jackson-mapper-asl" % depend.versions.jackson,
-    dependencyOverrides += "org.codehaus.jackson" % "jackson-core-asl"   % depend.versions.jackson
+    dependencyOverrides += "org.codehaus.jackson" % "jackson-mapper-asl" % depend.versions.jacksonV1,
+    dependencyOverrides += "org.codehaus.jackson" % "jackson-core-asl"   % depend.versions.jacksonV1
   )
 
   /** Exclude provided hadoop jars from a ModuleID */
@@ -147,10 +151,10 @@ object UniformDependencyPlugin extends Plugin {
       "com.google.protobuf"          % "protobuf-java"             % "2.5.0",
       "com.google.inject"            % "guice"                     % "3.0",
       "com.google.inject.extensions" % "guice-servlet"             % "3.0",
-      "org.codehaus.jackson"         % "jackson-mapper-asl"        % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-core-asl"          % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-jaxrs"             % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-xc"                % depend.versions.jackson,
+      "org.codehaus.jackson"         % "jackson-mapper-asl"        % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-core-asl"          % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-jaxrs"             % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-xc"                % depend.versions.jacksonV1,
       "org.codehaus.jettison"        % "jettison"                  % "1.1",
       "org.xerial.snappy"            % "snappy-java"               % "1.0.4.1",
       "junit"                        % "junit"                     % "4.11",
@@ -217,7 +221,8 @@ object UniformDependencyPlugin extends Plugin {
       def slf4j         = "1.7.5"
       def asm           = "3.2"
       def guava         = "11.0.2"
-      def jackson       = "1.8.8"
+      def jacksonV1     = "1.8.8"
+      def jacksonV2     = "2.3.1"
       def netty         = "3.6.2.Final"
 
       // cloudera modules *not* on the hadoop classpath
