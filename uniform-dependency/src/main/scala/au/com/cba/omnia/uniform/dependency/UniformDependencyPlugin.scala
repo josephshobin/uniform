@@ -74,6 +74,9 @@ object UniformDependencyPlugin extends Plugin {
     // depend.hive (hive-exec) vs. depend.scalding (cascading-core)
     dependencyOverrides += "org.codehaus.janino" % "janino"  % "2.7.6",
 
+    // depend.hive (hive-exec) vs. depend.time (joda-time)
+    dependencyOverrides += "joda-time" % "joda-time"  % depend.versions.jodaTime,
+
     // override the jackson-mapper jar versions, to workaround a dependency on the
     // non-hadoop version of these jars being added to the internal ivy configurations,
     // which I haven't figured out how to prevent
