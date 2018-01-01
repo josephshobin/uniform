@@ -129,7 +129,7 @@ object UniformDependencyPlugin extends Plugin {
       "org.slf4j"                    % "slf4j-api"                 % depend.versions.slf4j,
       "org.slf4j"                    % "slf4j-log4j12"             % depend.versions.slf4j,
       "log4j"                        % "log4j"                     % depend.versions.log4j,
-      "commons-beanutils"            % "commons-beanutils"         % "1.7.0",
+      "commons-beanutils"            % "commons-beanutils"         % "1.9.2",
       "commons-beanutils"            % "commons-beanutils-core"    % "1.8.0",
       "commons-cli"                  % "commons-cli"               % "1.2",
       "commons-codec"                % "commons-codec"             % "1.4",
@@ -161,7 +161,7 @@ object UniformDependencyPlugin extends Plugin {
       "org.codehaus.jettison"        % "jettison"                  % "1.1",
       "org.xerial.snappy"            % "snappy-java"               % "1.0.4.1",
       "junit"                        % "junit"                     % "4.11",
-      "jline"                        % "jline"                     % "0.9.94",
+      "jline"                        % "jline"                     % "2.11",
       "org.mortbay.jetty"            % "jetty"                     % depend.versions.jetty,
       "org.mortbay.jetty"            % "jetty-util"                % depend.versions.jetty,
       "hsqldb"                       % "hsqldb"                    % "1.8.0.10",
@@ -226,7 +226,7 @@ object UniformDependencyPlugin extends Plugin {
       def guava         = "11.0.2"
       def jacksonV1     = "1.8.8"
       def jacksonV2     = "2.3.1"
-      def netty         = "3.6.2.Final"
+      def netty         = "3.10.5.Final"
 
       // cloudera modules *not* on the hadoop classpath
       def hive          = "1.1.0-cdh5.13.1"
