@@ -180,7 +180,8 @@ object UniformDependencyPlugin extends Plugin {
       "com.sun.jersey.contribs"      % "jersey-guice"              % "1.9",
       "org.fusesource.leveldbjni"    % "leveldbjni-all"            % "1.8",
       "asm"                          % "asm"                       % depend.versions.asm,
-      "io.netty"                     % "netty"                     % depend.versions.netty
+      "io.netty"                     % "netty"                     % depend.versions.netty,
+      "org.apache.htrace"            % "htrace-core4"              % "4.0.1-incubating"
     )
 
     // Different versions of these jars have different organizations. Could do
