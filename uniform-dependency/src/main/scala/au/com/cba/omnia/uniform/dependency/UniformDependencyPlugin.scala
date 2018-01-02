@@ -77,6 +77,9 @@ object UniformDependencyPlugin extends Plugin {
     // depend.hive (hive-exec) vs. depend.time (joda-time)
     dependencyOverrides += "joda-time" % "joda-time"  % depend.versions.jodaTime,
 
+    // depend.scalding (scalding-core) vs. CDH 5.13.1 (hadoop libraries)
+    dependencyOverrides += "org.slf4j" % "slf4j-api"  % depend.versions.slf4j,
+
     // depend.hive (hive-exec) vs. sqoop
     dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind"    % depend.versions.jacksonV2,
     dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % depend.versions.jacksonV2,
