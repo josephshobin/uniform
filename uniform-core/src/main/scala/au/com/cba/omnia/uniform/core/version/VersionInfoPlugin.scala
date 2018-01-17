@@ -25,29 +25,38 @@ object VersionInfoPlugin extends Plugin {
 
   lazy val versionInfoSettings: Seq[Sett] = Seq[Sett](
     (sourceGenerators in Compile) <+= (sourceManaged in Compile, target, version, baseDirectory, rootPackage, sourceGenerators in Compile).map((src, target, version, base, pkg, gen) => {
-      val scala = src / "info.scala"
-      val txt   = target / "VERSION.txt"
+      val scalaFile = src / "info.scala"
+      val txtFile   = target / "VERSION.txt"
+      val git       = commit(base).show
+      val date      = timestamp(now)
+      val verbose   = s"${version}-${date}-${git.take(7)}"
 
       IO.write(
-        scala,
+        scalaFile,
         s"""package $pkg
            |
+           |/** Metadata for Scala builds. */
            |object VersionInfo {
+           |  /** ${version} (from `sbt` settings, typically based on a project’s `version.sbt` and supplemented by CI/CD tooling). */
            |  val version = "$version"
-           |  val git     = "${commit(base).show}"
-           |  val date    = "${timestamp(now)}"
-           |  val verbose = s"$$version-$$date-$${git.take(7)}"
+           |  /** ${git} (based on `git log` when `uniform` plugin invoked). */
+           |  val git     = "${git}"
+           |  /** ${date} (timestamp when `uniform` plugin invoked). */
+           |  val date    = "${date}"
+           |  /** ${verbose} (combination of [[version]], [[git]] and [[date]] when `uniform` plugin invoked). */
+           |  val verbose = "${verbose}"
            |}""".stripMargin
       )
 
       IO.write(
-        txt,
-        s"""VERSION=$version
-           |GIT=${commit(base).show}
-           |DATE=${timestamp(now)}""".stripMargin
+        txtFile,
+        s"""VERSION=${version}
+           |VERBOSE=${verbose}
+           |GIT=${git}
+           |DATE=${date}""".stripMargin
       )
 
-      Seq(scala)
+      Seq(scalaFile)
     })
   )
 }
