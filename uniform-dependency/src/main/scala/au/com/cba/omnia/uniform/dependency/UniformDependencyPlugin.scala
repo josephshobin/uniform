@@ -71,11 +71,24 @@ object UniformDependencyPlugin extends Plugin {
     // cascading-hive (hive-exec) and sqoop vs. avro-mapred
     dependencyOverrides += "org.apache.velocity" % "velocity"  % "1.7",
 
+    // depend.hive (hive-exec) vs. depend.scalding (cascading-core)
+    dependencyOverrides += "org.codehaus.janino" % "janino"  % "2.7.6",
+
+    // depend.hive (hive-exec) vs. depend.time (joda-time)
+    dependencyOverrides += "joda-time" % "joda-time"  % depend.versions.jodaTime,
+
+    // depend.scalding (scalding-core) vs. CDH 5.13.0 (hadoop libraries)
+    dependencyOverrides += "org.slf4j" % "slf4j-api"  % depend.versions.slf4j,
+
+    // depend.hive (hive-exec) vs. sqoop
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind"    % depend.versions.jacksonV2,
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % depend.versions.jacksonV2,
+
     // override the jackson-mapper jar versions, to workaround a dependency on the
     // non-hadoop version of these jars being added to the internal ivy configurations,
     // which I haven't figured out how to prevent
-    dependencyOverrides += "org.codehaus.jackson" % "jackson-mapper-asl" % depend.versions.jackson,
-    dependencyOverrides += "org.codehaus.jackson" % "jackson-core-asl"   % depend.versions.jackson
+    dependencyOverrides += "org.codehaus.jackson" % "jackson-mapper-asl" % depend.versions.jacksonV1,
+    dependencyOverrides += "org.codehaus.jackson" % "jackson-core-asl"   % depend.versions.jacksonV1
   )
 
   /** Exclude provided hadoop jars from a ModuleID */
@@ -116,7 +129,7 @@ object UniformDependencyPlugin extends Plugin {
       "org.slf4j"                    % "slf4j-api"                 % depend.versions.slf4j,
       "org.slf4j"                    % "slf4j-log4j12"             % depend.versions.slf4j,
       "log4j"                        % "log4j"                     % depend.versions.log4j,
-      "commons-beanutils"            % "commons-beanutils"         % "1.7.0",
+      "commons-beanutils"            % "commons-beanutils"         % "1.9.2",
       "commons-beanutils"            % "commons-beanutils-core"    % "1.8.0",
       "commons-cli"                  % "commons-cli"               % "1.2",
       "commons-codec"                % "commons-codec"             % "1.4",
@@ -136,19 +149,19 @@ object UniformDependencyPlugin extends Plugin {
       "org.apache.httpcomponents"    % "httpcore"                  % "4.2.5",
       "org.apache.avro"              % "avro"                      % depend.versions.avro,
       "org.apache.zookeeper"         % "zookeeper"                 % depend.versions.zookeeper,
-      "com.google.code.findbugs"     % "jsr305"                    % "1.3.9",
+      "com.google.code.findbugs"     % "jsr305"                    % "3.0.0",
       "com.google.guava"             % "guava"                     % depend.versions.guava,
       "com.google.protobuf"          % "protobuf-java"             % "2.5.0",
       "com.google.inject"            % "guice"                     % "3.0",
       "com.google.inject.extensions" % "guice-servlet"             % "3.0",
-      "org.codehaus.jackson"         % "jackson-mapper-asl"        % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-core-asl"          % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-jaxrs"             % depend.versions.jackson,
-      "org.codehaus.jackson"         % "jackson-xc"                % depend.versions.jackson,
+      "org.codehaus.jackson"         % "jackson-mapper-asl"        % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-core-asl"          % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-jaxrs"             % depend.versions.jacksonV1,
+      "org.codehaus.jackson"         % "jackson-xc"                % depend.versions.jacksonV1,
       "org.codehaus.jettison"        % "jettison"                  % "1.1",
       "org.xerial.snappy"            % "snappy-java"               % "1.0.4.1",
       "junit"                        % "junit"                     % "4.11",
-      "jline"                        % "jline"                     % "0.9.94",
+      "jline"                        % "jline"                     % "2.11",
       "org.mortbay.jetty"            % "jetty"                     % depend.versions.jetty,
       "org.mortbay.jetty"            % "jetty-util"                % depend.versions.jetty,
       "hsqldb"                       % "hsqldb"                    % "1.8.0.10",
@@ -167,7 +180,8 @@ object UniformDependencyPlugin extends Plugin {
       "com.sun.jersey.contribs"      % "jersey-guice"              % "1.9",
       "org.fusesource.leveldbjni"    % "leveldbjni-all"            % "1.8",
       "asm"                          % "asm"                       % depend.versions.asm,
-      "io.netty"                     % "netty"                     % depend.versions.netty
+      "io.netty"                     % "netty"                     % depend.versions.netty,
+      "org.apache.htrace"            % "htrace-core4"              % "4.0.1-incubating"
     )
 
     // Different versions of these jars have different organizations. Could do
@@ -198,12 +212,12 @@ object UniformDependencyPlugin extends Plugin {
   object depend {
     object versions {
       // cloudera modules
-      def hadoop        = "2.5.0-mr1-cdh5.3.8"
-      def hadoopNoMr1   = "2.5.0-cdh5.3.8"
-      def parquet       = "1.5.0-cdh5.3.8"
-      def parquetFormat = "2.1.0-cdh5.3.8"
-      def avro          = "1.7.6-cdh5.3.8"
-      def zookeeper     = "3.4.5-cdh5.3.8"
+      def hadoop        = "2.6.0-mr1-cdh5.13.0"
+      def hadoopNoMr1   = "2.6.0-cdh5.13.0"
+      def parquet       = "1.5.0-cdh5.13.0"
+      def parquetFormat = "2.1.0-cdh5.13.0"
+      def avro          = "1.7.6-cdh5.13.0"
+      def zookeeper     = "3.4.5-cdh5.13.0"
       def jetty         = "6.1.26.cloudera.4"
 
       // other modules in the hadoop classpath
@@ -211,11 +225,12 @@ object UniformDependencyPlugin extends Plugin {
       def slf4j         = "1.7.5"
       def asm           = "3.2"
       def guava         = "11.0.2"
-      def jackson       = "1.8.8"
-      def netty         = "3.6.2.Final"
+      def jacksonV1     = "1.8.8"
+      def jacksonV2     = "2.3.1"
+      def netty         = "3.10.5.Final"
 
       // cloudera modules *not* on the hadoop classpath
-      def hive          = "0.13.1-cdh5.3.8"
+      def hive          = "1.1.0-cdh5.13.0"
       def libthrift     = "0.9.0-cdh5-3"
 
       // non-hadoop modules
