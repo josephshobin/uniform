@@ -77,7 +77,7 @@ object UniformDependencyPlugin extends Plugin {
     // depend.hive (hive-exec) vs. depend.time (joda-time)
     dependencyOverrides += "joda-time" % "joda-time"  % depend.versions.jodaTime,
 
-    // depend.scalding (scalding-core) vs. CDH 5.13.1 (hadoop libraries)
+    // depend.scalding (scalding-core) vs. CDH 5.13.0 (hadoop libraries)
     dependencyOverrides += "org.slf4j" % "slf4j-api"  % depend.versions.slf4j,
 
     // depend.hive (hive-exec) vs. sqoop
@@ -212,12 +212,12 @@ object UniformDependencyPlugin extends Plugin {
   object depend {
     object versions {
       // cloudera modules
-      def hadoop        = "2.6.0-mr1-cdh5.13.1"
-      def hadoopNoMr1   = "2.6.0-cdh5.13.1"
-      def parquet       = "1.5.0-cdh5.13.1"
-      def parquetFormat = "2.1.0-cdh5.13.1"
-      def avro          = "1.7.6-cdh5.13.1"
-      def zookeeper     = "3.4.5-cdh5.13.1"
+      def hadoop        = "2.6.0-mr1-cdh5.13.0"
+      def hadoopNoMr1   = "2.6.0-cdh5.13.0"
+      def parquet       = "1.5.0-cdh5.13.0"
+      def parquetFormat = "2.1.0-cdh5.13.0"
+      def avro          = "1.7.6-cdh5.13.0"
+      def zookeeper     = "3.4.5-cdh5.13.0"
       def jetty         = "6.1.26.cloudera.4"
 
       // other modules in the hadoop classpath
@@ -230,7 +230,7 @@ object UniformDependencyPlugin extends Plugin {
       def netty         = "3.10.5.Final"
 
       // cloudera modules *not* on the hadoop classpath
-      def hive          = "1.1.0-cdh5.13.1"
+      def hive          = "1.1.0-cdh5.13.0"
       def libthrift     = "0.9.0-cdh5-3"
 
       // non-hadoop modules
