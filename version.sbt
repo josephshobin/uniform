@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-version in ThisBuild := "1.16.1"
+version in ThisBuild := "2.0.0"
 
 version in ThisBuild <<= (version in ThisBuild)(v => s"$v-SNAPSHOT") // We can't use LocalVersionPlugin here.
 
