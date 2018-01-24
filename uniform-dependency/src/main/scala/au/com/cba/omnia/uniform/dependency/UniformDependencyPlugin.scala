@@ -28,7 +28,7 @@ object UniformDependencyPlugin extends Plugin {
     , "releases" at "http://oss.sonatype.org/content/repositories/releases"
     , "Concurrent Maven Repo" at "http://conjars.org/repo"
     , "Clojars Repository" at "http://clojars.org/repo"
-    , "Twitter Maven" at "http://maven.twttr.com"
+    , "Twitter Maven" at "https://maven.twttr.com"
     , "Hadoop Releases" at "https://repository.cloudera.com/content/repositories/releases/"
     , "cloudera" at "https://repository.cloudera.com/artifactory/cloudera-repos/"
     , "commbank-releases" at "http://commbank.artifactoryonline.com/commbank/ext-releases-local"
