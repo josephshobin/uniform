@@ -133,7 +133,7 @@ object UniformDependencyPlugin extends Plugin {
       "commons-beanutils"            % "commons-beanutils-core"    % "1.8.0",
       "commons-cli"                  % "commons-cli"               % "1.2",
       "commons-codec"                % "commons-codec"             % "1.4",
-      "commons-collections"          % "commons-collections"       % "3.2.1",
+      "commons-collections"          % "commons-collections"       % "3.2.2",
       "org.apache.commons"           % "commons-compress"          % "1.4.1",
       "commons-configuration"        % "commons-configuration"     % "1.6",
       "commons-daemon"               % "commons-daemon"            % "1.0.13",
@@ -164,8 +164,8 @@ object UniformDependencyPlugin extends Plugin {
       "jline"                        % "jline"                     % "2.11",
       "org.mortbay.jetty"            % "jetty"                     % depend.versions.jetty,
       "org.mortbay.jetty"            % "jetty-util"                % depend.versions.jetty,
-      "hsqldb"                       % "hsqldb"                    % "1.8.0.10",
-      "ant-contrib"                  % "ant-contrib"               % "1.0b3",
+      "hsqldb"                       % "hsqldb"                    % "1.8.0.10", // hsqldb doesn't seem to be on the hadoop classpath anymore, if it ever was
+      "ant-contrib"                  % "ant-contrib"               % "1.0b3", // ant-contrib doesn't seem to be on the hadoop classpath anymore, if it ever was
       "aopalliance"                  % "aopalliance"               % "1.0",
       "javax.inject"                 % "javax.inject"              % "1",
       "javax.xml.bind"               % "jaxb-api"                  % "2.2.2",
@@ -231,7 +231,7 @@ object UniformDependencyPlugin extends Plugin {
 
       // cloudera modules *not* on the hadoop classpath
       def hive          = "1.1.0-cdh5.13.0"
-      def libthrift     = "0.9.0-cdh5-3"
+      def libthrift     = "0.9.3"
 
       // non-hadoop modules
       def macroParadise = "2.1.0"
