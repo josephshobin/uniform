@@ -15,6 +15,10 @@
 package au.com.cba.omnia.uniform.core
 package standard
 
+import java.lang.management.{ ManagementFactory, MemoryType }
+
+import _root_.scala.collection.JavaConverters._
+
 import sbt._, Keys._
 
 import sbtunidoc.Plugin._, UnidocKeys._
@@ -100,5 +104,41 @@ object StandardProjectPlugin extends Plugin {
         !(scalaBinaryVersion.value == "2.10" && o == "-Ywarn-unused-import")
       )
     )
+
+    /** Adds settings to pass on JVM max memory config to forked JVMs.
+     *
+     * @param multipleMB Round the max memory settings up to the nearest multiple of this figure, in megabytes. Defaults to 1024.
+     */
+    def forkWithMemorySettings(multipleMB: Long = 1024): Seq[sbt.Setting[_]] = {
+      if (multipleMB <= 0) throw new IllegalArgumentException(s"max memory multiple must be >= 1 megabytes")
+
+      def roundMB(bytes: Long) = {
+        val multiple = multipleMB * 1024 * 1024;
+        val rounded = if (bytes % multiple == 0) bytes else multiple * (1 + bytes / multiple)
+        rounded / (1024 * 1024)
+      }
+
+      val pools = ManagementFactory.getMemoryPoolMXBeans.asScala
+
+      // in all recent JVM versions I am aware of, the max heap setting is divided between the HEAP generations
+      // with two copies of the Survivor generation (one copy populated, one empty), totalling slightly less than max heap
+
+      val rawHeapMax = pools
+        .filter(_.getType == MemoryType.HEAP)
+        .map(pool => pool.getUsage.getMax * (if (pool.getName.contains("Survivor")) 2 else 1))
+        .sum
+      val heapMaxMB = roundMB(rawHeapMax)
+
+      // if we are running JVM 8 or later, we shouldn't find a Perm Gen pool
+      val heapSettings = Seq(javaOptions += s"-Xmx${heapMaxMB}M")
+
+      val permGenSettings =
+        pools.find(_.getName.contains("Perm Gen")).map(pool => {
+          val permGenMaxMB = roundMB(pool.getUsage.getMax)
+          javaOptions += s"-XX:MaxPermSize=${permGenMaxMB}M"
+        })
+
+      heapSettings ++ permGenSettings
+    }
   }
 }
