@@ -164,8 +164,6 @@ object UniformDependencyPlugin extends Plugin {
       "jline"                        % "jline"                     % "2.11",
       "org.mortbay.jetty"            % "jetty"                     % depend.versions.jetty,
       "org.mortbay.jetty"            % "jetty-util"                % depend.versions.jetty,
-      "hsqldb"                       % "hsqldb"                    % "1.8.0.10", // hsqldb doesn't seem to be on the hadoop classpath anymore, if it ever was
-      "ant-contrib"                  % "ant-contrib"               % "1.0b3", // ant-contrib doesn't seem to be on the hadoop classpath anymore, if it ever was
       "aopalliance"                  % "aopalliance"               % "1.0",
       "javax.inject"                 % "javax.inject"              % "1",
       "javax.xml.bind"               % "jaxb-api"                  % "2.2.2",
