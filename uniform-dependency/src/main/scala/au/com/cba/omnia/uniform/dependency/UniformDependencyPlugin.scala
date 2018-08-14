@@ -58,9 +58,9 @@ object UniformDependencyPlugin extends Plugin {
   val strictDependencySettings: Seq[Sett] = Seq[Sett](
     conflictManager := ConflictManager.strict,
 
-    dependencyOverrides <+= scalaVersion(sv => "org.scala-lang" % "scala-library"  % sv),
-    dependencyOverrides <+= scalaVersion(sv => "org.scala-lang" % "scala-compiler" % sv),
-    dependencyOverrides <+= scalaVersion(sv => "org.scala-lang" % "scala-reflect"  % sv),
+    dependencyOverrides += "org.scala-lang" % "scala-library"  % scalaVersion.value,
+    dependencyOverrides += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+    dependencyOverrides += "org.scala-lang" % "scala-reflect"  % scalaVersion.value,
 
     // depend.hive vs. depend.scrooge vs. parquet-cascading
     dependencyOverrides += "org.apache.thrift"   % "libthrift" % depend.versions.libthrift,
@@ -211,14 +211,14 @@ object UniformDependencyPlugin extends Plugin {
   object depend {
     object versions {
       // cloudera modules
-      def hadoop        = "2.6.0-mr1-cdh5.13.0"
-      def hadoopNoMr1   = "2.6.0-cdh5.13.0"
+      def hadoop        = "2.6.0-mr1-cdh5.13.3"
+      def hadoopNoMr1   = "2.6.0-cdh5.13.3"
       def parquetBase   = "1.5.0"
       def parquet       = s"${parquetBase}-cdh5.13.0"
       def parquetTools  = parquetBase
-      def parquetFormat = "2.1.0-cdh5.13.0"
-      def avro          = "1.7.6-cdh5.13.0"
-      def zookeeper     = "3.4.5-cdh5.13.0"
+      def parquetFormat = "2.1.0-cdh5.13.3"
+      def avro          = "1.7.6-cdh5.13.3"
+      def zookeeper     = "3.4.5-cdh5.13.3"
       def jetty         = "6.1.26.cloudera.4"
 
       // other modules in the hadoop classpath
@@ -228,10 +228,10 @@ object UniformDependencyPlugin extends Plugin {
       def guava         = "11.0.2"
       def jacksonV1     = "1.8.8"
       def jacksonV2     = "2.3.1"
-      def netty         = "3.10.5.Final"
+      def netty         = "3.10.6.Final"
 
       // cloudera modules *not* on the hadoop classpath
-      def hive          = "1.1.0-cdh5.13.0"
+      def hive          = "1.1.0-cdh5.13.3"
       def libthrift     = "0.9.3"
 
       // non-hadoop modules

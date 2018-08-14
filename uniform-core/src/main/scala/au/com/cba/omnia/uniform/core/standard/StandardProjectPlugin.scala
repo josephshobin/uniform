@@ -66,12 +66,12 @@ object StandardProjectPlugin extends Plugin {
     /** Settings for each sbt project and subproject to create api mappings and expose api url.*/
     def docSettings(link: String): Seq[sbt.Setting[_]] = Seq(
       autoAPIMappings := true,
-      apiMappings in (ScalaUnidoc, unidoc) <++= (fullClasspath in Compile).map(cp => Seq(
-        assignApiUrl(cp, "cascading", "cascading-core", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(cp, "cascading", "cascading-hadoop", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(cp, "cascading", "cascading-local", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(cp, "com.twitter", "scalding-core", "http://twitter.github.io/scalding/")
-      ).flatten.toMap),
+      apiMappings in (ScalaUnidoc, unidoc) ++= Seq(
+        assignApiUrl(fullClasspath.value, "cascading", "cascading-core", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl(fullClasspath.value, "cascading", "cascading-hadoop", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl(fullClasspath.value, "cascading", "cascading-local", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl(fullClasspath.value, "com.twitter", "scalding-core", "http://twitter.github.io/scalding/")
+      ).flatten.toMap,
       apiURL := Some(url(link))
     )
 
@@ -82,14 +82,14 @@ object StandardProjectPlugin extends Plugin {
         docSourceUrl  := "https://github.com/CommBank",
         site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
         includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.yml",
-        apiURL <<= (baseDirectory, docRootUrl)((base, docRoot) => Some(url(s"$docRoot/${base.getName}/latest/api"))),
-        scalacOptions in (ScalaUnidoc, unidoc) <++= (version, baseDirectory, docSourceUrl).map { (v, base, sourceRoot) =>
+        apiURL := Some(url(s"$docRootUrl/${baseDirectory.value}/latest/api")),
+        scalacOptions in (ScalaUnidoc, unidoc) ++= {
           val urlSettings =
-            GitInfo.commit(base).hashOption.toSeq flatMap { h =>
-              Seq("-doc-source-url", s"$sourceRoot/${ base.getName }/tree/$h/€{FILE_PATH}.scala")
+            GitInfo.commit(baseDirectory.value).hashOption.toSeq flatMap { h =>
+              Seq("-doc-source-url", s"${docSourceUrl.value}/${ baseDirectory.value }/tree/$h/€{FILE_PATH}.scala")
             }
 
-          Seq("-sourcepath", base.getAbsolutePath) ++ urlSettings
+          Seq("-sourcepath", baseDirectory.value.getAbsolutePath) ++ urlSettings
         }
       )
 

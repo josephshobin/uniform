@@ -24,21 +24,21 @@ object VersionInfoPlugin extends Plugin {
   lazy val rootPackage = SettingKey[String]("root-package")
 
   lazy val versionInfoSettings: Seq[Sett] = Seq[Sett](
-    (sourceGenerators in Compile) <+= (sourceManaged in Compile, target, version, baseDirectory, rootPackage, sourceGenerators in Compile).map((src, target, version, base, pkg, gen) => {
-      val scalaFile = src / "info.scala"
-      val txtFile   = target / "VERSION.txt"
-      val git       = commit(base).show
+    sourceGenerators in Compile  += Def.task {
+      val scalaFile = sourceManaged.value / "info.scala"
+      val txtFile   = target.value / "VERSION.txt"
+      val git       = commit(baseDirectory.value).show
       val date      = timestamp(now)
-      val verbose   = s"${version}-${date}-${git.take(7)}"
+      val verbose   = s"${version.value}-${date}-${git.take(7)}"
 
       IO.write(
         scalaFile,
-        s"""package $pkg
+        s"""package ${rootPackage.value}
            |
            |/** Metadata for Scala builds. */
            |object VersionInfo {
-           |  /** ${version} (from `sbt` settings, typically based on a project’s `version.sbt` and supplemented by CI/CD tooling). */
-           |  val version = "$version"
+           |  /** ${version.value} (from `sbt` settings, typically based on a project’s `version.sbt` and supplemented by CI/CD tooling). */
+           |  val version = "${version.value}"
            |  /** ${git} (based on `git log` when `uniform` plugin invoked). */
            |  val git     = "${git}"
            |  /** ${date} (timestamp when `uniform` plugin invoked). */
@@ -57,6 +57,6 @@ object VersionInfoPlugin extends Plugin {
       )
 
       Seq(scalaFile)
-    })
+    }
   )
 }
