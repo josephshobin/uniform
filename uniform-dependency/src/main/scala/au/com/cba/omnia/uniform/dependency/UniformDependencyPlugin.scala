@@ -212,7 +212,9 @@ object UniformDependencyPlugin extends Plugin {
       // cloudera modules
       def hadoop        = "2.6.0-mr1-cdh5.13.0"
       def hadoopNoMr1   = "2.6.0-cdh5.13.0"
-      def parquet       = "1.5.0-cdh5.13.0"
+      def parquetBase   = "1.5.0"
+      def parquet       = s"${parquetBase}-cdh5.13.0"
+      def parquetTools  = parquetBase
       def parquetFormat = "2.1.0-cdh5.13.0"
       def avro          = "1.7.6-cdh5.13.0"
       def zookeeper     = "3.4.5-cdh5.13.0"
@@ -247,6 +249,7 @@ object UniformDependencyPlugin extends Plugin {
       def bijection     = "0.9.1"  // Needs to align with what is required by scalding
       def scallop       = "0.9.5"
       def objenesis     = "1.2"
+      def scalikejdbc   = "2.4.0"
     }
 
     def omnia(project: String, version: String, configuration: String = "compile"): Seq[ModuleID] =
@@ -320,6 +323,19 @@ object UniformDependencyPlugin extends Plugin {
     def time(joda: String = versions.jodaTime, nscala: String = versions.nscalaTime) = Seq(
       "joda-time"                %  "joda-time"                     % joda,
       "com.github.nscala-time"   %% "nscala-time"                   % nscala exclude("joda-time", "joda-time")
+    )
+
+    def scalikejdbc(scalikejdbc: String = versions.scalikejdbc) = Seq(
+      "org.scalikejdbc"          %% "scalikejdbc"                   % scalikejdbc
+        exclude("org.joda", "joda-convert")
+        exclude("joda-time", "joda-time")
+        exclude("org.slf4j", "slf4j-api")
+        exclude("org.scala-lang.modules", "scala-parser-combinators_2.11")
+        exclude("commons-logging", "commons-logging")
+    )
+
+    def parquetTools(parquetTools: String = versions.parquetTools) = Seq(
+      "com.twitter"                  % "parquet-tools"              % parquetTools
     )
 
     def scalding(scalding: String = versions.scalding, algebird: String = versions.algebird, bijection: String = versions.bijection) = Seq(
