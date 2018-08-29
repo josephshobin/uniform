@@ -214,7 +214,7 @@ object UniformDependencyPlugin extends Plugin {
       def hadoop        = "2.6.0-mr1-cdh5.13.3"
       def hadoopNoMr1   = "2.6.0-cdh5.13.3"
       def parquetBase   = "1.5.0"
-      def parquet       = s"${parquetBase}-cdh5.13.0"
+      def parquet       = s"${parquetBase}-cdh5.13.3"
       def parquetTools  = parquetBase
       def parquetFormat = "2.1.0-cdh5.13.3"
       def avro          = "1.7.6-cdh5.13.3"

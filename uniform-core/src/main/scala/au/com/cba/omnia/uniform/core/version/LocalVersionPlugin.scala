@@ -20,6 +20,6 @@ import sbt._, Keys._
 object LocalVersionPlugin extends Plugin {
   /** Appends `-SNAPSHOT` to the version. */
   def localVersionSettings = Seq(
-    version in ThisBuild := s"${version.value}-SNAPSHOT"
+    version in ThisBuild := s"${(version in ThisBuild).value}-SNAPSHOT"
   )
 }

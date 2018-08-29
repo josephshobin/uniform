@@ -67,10 +67,10 @@ object StandardProjectPlugin extends Plugin {
     def docSettings(link: String): Seq[sbt.Setting[_]] = Seq(
       autoAPIMappings := true,
       apiMappings in (ScalaUnidoc, unidoc) ++= Seq(
-        assignApiUrl(fullClasspath.value, "cascading", "cascading-core", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(fullClasspath.value, "cascading", "cascading-hadoop", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(fullClasspath.value, "cascading", "cascading-local", "http://docs.cascading.org/cascading/2.5/javadoc"),
-        assignApiUrl(fullClasspath.value, "com.twitter", "scalding-core", "http://twitter.github.io/scalding/")
+        assignApiUrl((fullClasspath in Compile).value, "cascading", "cascading-core", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl((fullClasspath in Compile).value, "cascading", "cascading-hadoop", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl((fullClasspath in Compile).value, "cascading", "cascading-local", "http://docs.cascading.org/cascading/2.5/javadoc"),
+        assignApiUrl((fullClasspath in Compile).value, "com.twitter", "scalding-core", "http://twitter.github.io/scalding/")
       ).flatten.toMap,
       apiURL := Some(url(link))
     )
@@ -82,7 +82,7 @@ object StandardProjectPlugin extends Plugin {
         docSourceUrl  := "https://github.com/CommBank",
         site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
         includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.yml",
-        apiURL := Some(url(s"$docRootUrl/${baseDirectory.value}/latest/api")),
+        apiURL := Some(url(s"${docRootUrl.value}/${baseDirectory.value}/latest/api")),
         scalacOptions in (ScalaUnidoc, unidoc) ++= {
           val urlSettings =
             GitInfo.commit(baseDirectory.value).hashOption.toSeq flatMap { h =>

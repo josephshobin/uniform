@@ -25,7 +25,7 @@ object VersionInfoPlugin extends Plugin {
 
   lazy val versionInfoSettings: Seq[Sett] = Seq[Sett](
     sourceGenerators in Compile  += Def.task {
-      val scalaFile = sourceManaged.value / "info.scala"
+      val scalaFile = (sourceManaged in Compile).value / "info.scala"
       val txtFile   = target.value / "VERSION.txt"
       val git       = commit(baseDirectory.value).show
       val date      = timestamp(now)

@@ -25,6 +25,6 @@ object UniqueVersionPlugin extends Plugin {
   /** Appends the timestamp and commish to the specified version number. */
   @deprecated("This will be removed in future versions since we use the CI to set the version number. Please use `localVersionSettings` instead.","1.9.0")
   def uniqueVersionSettings = Seq(
-    version in ThisBuild := version.value + "-" + timestamp(now) + "-" + commish(baseDirectory.value).show
+    version in ThisBuild := (version in ThisBuild).value + "-" + timestamp(now) + "-" + commish(baseDirectory.value).show
   )
 }
