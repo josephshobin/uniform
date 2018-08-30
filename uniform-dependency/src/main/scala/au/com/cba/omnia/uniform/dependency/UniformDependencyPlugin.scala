@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -81,6 +81,7 @@ object UniformDependencyPlugin extends Plugin {
     dependencyOverrides += "org.slf4j" % "slf4j-api"  % depend.versions.slf4j,
 
     // depend.hive (hive-exec) vs. sqoop
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-core"        % depend.versions.jacksonV2,
     dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind"    % depend.versions.jacksonV2,
     dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % depend.versions.jacksonV2,
 
@@ -242,6 +243,7 @@ object UniformDependencyPlugin extends Plugin {
       def scalacheck    = "1.11.4" // Downgrade to a version that works with both specs2 and scalaz
       def nscalaTime    = "2.10.0"
       def jodaTime      = "2.9.2"  // Needs to align with what is required by nscala-time
+      def jodaConvert   = "1.2"
       def scalding      = "0.16.0"
       def cascading     = "2.6.1"  // Needs to align with what is required by scalding
       def algebird      = "0.12.0" // Needs to align with what is required by scalding
@@ -250,6 +252,27 @@ object UniformDependencyPlugin extends Plugin {
       def scallop       = "0.9.5"
       def objenesis     = "1.2"
       def scalikejdbc   = "2.4.0"
+      def argonaut      = "6.1"
+      def javaxMail     = "1.4.1"
+      def mockJavamail  = "1.9"
+      def mockito       = "1.9.5"
+      def playJson      = "2.3.10"
+      def scalatest     = "3.0.1"
+      def semver        = "0.9.0"
+      def spark         = "2.1.0"
+      def tsConfig      = "1.2.1"
+      def tsLogging     = "3.4.0"
+
+      // databases (runtime)
+      def hsqldb        = "2.3.2"
+      def mssqljdbc     = "4.0.0"
+      def oraclejdbc6   = "11.2.0.3"
+      def oraclejdbc7   = "12.1.0.2"
+      def oraclejdbc    = oraclejdbc7
+      def postgresql    = "42.0.0.jre7"
+      def teradataSqoop = "1.6.1c5"
+      def teradataJdbc4 = "15.10.00.37"
+      def teradataJdbc  = teradataJdbc4
     }
 
     def omnia(project: String, version: String, configuration: String = "compile"): Seq[ModuleID] =
@@ -311,13 +334,26 @@ object UniformDependencyPlugin extends Plugin {
     def testing(
       specs: String = versions.specs, scalacheck: String = versions.scalacheck,
       scalaz: String = versions.scalaz, asm: String = versions.asm,
+      mockito: String = versions.mockito,
       configuration: String = "test"
     ) = Seq(
+      "org.mockito"              %  "mockito-all"                   % mockito     % configuration,
       "org.specs2"               %% "specs2-core"                   % specs       % configuration exclude("org.ow2.asm", "asm"),
+      "org.specs2"               %% "specs2-matcher-extra"          % specs       % configuration exclude("org.scala-lang.modules", "*"),
+      "org.specs2"               %% "specs2-mock"                   % specs       % configuration,
       "org.specs2"               %% "specs2-scalacheck"             % specs       % configuration exclude("org.ow2.asm", "asm") scalaExcludeAll("org.scalacheck", "scalacheck"),
       "org.scalacheck"           %% "scalacheck"                    % scalacheck  % configuration scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators"),
       "org.scalaz"               %% "scalaz-scalacheck-binding"     % scalaz      % configuration scalaExcludeAll("org.scalacheck", "scalacheck"),
       "asm"                      %  "asm"                           % asm         % configuration
+    )
+
+    def scalatest(
+      version: String = versions.scalatest,
+      configuration: String = "test"
+    ) = Seq(
+      "org.scalatest"            %% "scalatest"                     % version     % configuration
+        scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators")
+        scalaExcludeAll("org.scala-lang.modules", "scala-xml")
     )
 
     def time(joda: String = versions.jodaTime, nscala: String = versions.nscalaTime) = Seq(
@@ -328,15 +364,12 @@ object UniformDependencyPlugin extends Plugin {
     def scalikejdbc(scalikejdbc: String = versions.scalikejdbc) = Seq(
       "org.scalikejdbc"          %% "scalikejdbc"                   % scalikejdbc
         exclude("org.joda", "joda-convert")
-        exclude("joda-time", "joda-time")
-        exclude("org.slf4j", "slf4j-api")
-        exclude("org.scala-lang.modules", "scala-parser-combinators_2.11")
-        exclude("commons-logging", "commons-logging")
-    )
+        scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators")
+    ) map noHadoop
 
     def parquetTools(parquetTools: String = versions.parquetTools) = Seq(
-      "com.twitter"                  % "parquet-tools"              % parquetTools
-    )
+      "com.twitter"              % "parquet-tools"                  % parquetTools
+    ) map noHadoop
 
     def scalding(scalding: String = versions.scalding, algebird: String = versions.algebird, bijection: String = versions.bijection) = Seq(
       noHadoop("com.twitter"     %% "scalding-core"                 % scalding scalaExcludeAll("com.twitter", "bijection-core")),
@@ -360,7 +393,82 @@ object UniformDependencyPlugin extends Plugin {
     ) map noHadoop
 
     def parquet(version: String = versions.parquet) = Seq(
-      "com.twitter"              % "parquet-cascading"              % version     % "provided"
+      "com.twitter"              %  "parquet-cascading"             % version     % "provided"
     ) map noHadoop
+
+    def jodaConvert(version: String = versions.jodaConvert) = Seq(
+      "org.joda"                 %  "joda-convert"                  % version
+    )
+
+    // Hive has a transitive dependency on javax.mail#mail;1.4.1 yet it is not in the CDH 5 classpath
+    def javaxMail(version: String = versions.javaxMail) = Seq(
+      "javax.mail"               %  "mail"                          % version
+    )
+
+    def mockJavamail(version: String = versions.mockJavamail, exclusions: Seq[ModuleID] = javaxMail()) = Seq(
+      "org.jvnet.mock-javamail"  %  "mock-javamail"                 % version
+    ).map(noHadoop).map(_.excludeAll(exclusions))
+
+    def mail(javaxMailVersion: String = versions.javaxMail, mockJavamailTestVersion: String = versions.mockJavamail) =
+      javaxMail(javaxMailVersion) ++ mockJavamail(mockJavamailTestVersion).map(_ % "test")
+
+    def argonaut(version: String = versions.argonaut) = Seq(
+      "io.argonaut"              %% "argonaut"                      % version
+    )
+
+    def playJson(version: String = versions.playJson, exclusions: Seq[ModuleID] = jodaConvert()) = Seq(
+      "com.typesafe.play"        %% "play-json"                     % version
+    ).map(noHadoop).map(_.excludeAll(exclusions))
+
+    def spark(version: String = versions.spark) = Seq(
+      "org.apache.spark"         %% "spark-core"                    % version,
+      "org.apache.spark"         %% "spark-hive"                    % version,
+      "org.apache.spark"         %% "spark-mllib"                   % version,
+      "org.apache.spark"         %% "spark-sql"                     % version
+    )
+
+    def semver(version: String = versions.semver) = Seq(
+      "com.github.zafarkhaja"    %  "java-semver"                   % version
+    )
+
+    def tsConfig(version: String = versions.tsConfig) = Seq(
+      "com.typesafe"             %  "config"                        % version
+    )
+
+    def tsLogging(version: String = versions.tsLogging) = Seq(
+      "com.typesafe.scala-logging" %% "scala-logging"               % version
+    )
+
+    def hsqldb(version: String = versions.hsqldb) = Seq(
+      "org.hsqldb"               %  "hsqldb"                        % version
+    )
+
+    def mssqljdbc(version: String = versions.mssqljdbc) = Seq(
+      "com.microsoft"            %  "sqljdbc"                       % version
+    )
+
+    def oraclejdbc6(version: String = versions.oraclejdbc6) = Seq(
+      "com.oracle"               %  "ojdbc6"                        % version
+    )
+
+    def oraclejdbc7(version: String = versions.oraclejdbc7) = Seq(
+      "com.oracle"               %  "ojdbc7"                        % version
+    )
+
+    def oraclejdbc(version: String = versions.oraclejdbc) =
+      oraclejdbc7(version)
+
+    def postgresql(version: String = versions.postgresql) = Seq(
+      "org.postgresql"           %  "postgresql"                    % version
+    )
+
+    def teradata4(version: String = versions.teradataJdbc4, sqoopConnector: String = versions.teradataSqoop) = Seq(
+      "com.ncr.teradata"         %  "tdgssconfig"                   % version,
+      "com.ncr.teradata"         %  "terajdbc4"                     % version,
+      "com.cloudera.connector"   %  "sqoop-connector-teradata"      % sqoopConnector
+    )
+
+    def teradata(version: String = versions.teradataJdbc, sqoopConnector: String = versions.teradataSqoop) =
+      teradata4(version, sqoopConnector)
   }
 }

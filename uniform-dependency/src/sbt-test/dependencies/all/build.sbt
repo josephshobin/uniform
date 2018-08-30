@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -23,13 +23,31 @@ version := "0.1"
 libraryDependencies ++=
   depend.hadoopClasspath ++
   depend.hive()          ++
+  depend.parquet()       ++
+  depend.parquetTools()  ++
+  depend.scalding()      ++
+  depend.scrooge()       ++
+  // fp
   depend.scalaz()        ++
   depend.scalazStream()  ++
   depend.shapeless()     ++
+  // testing
+  depend.scalatest()     ++
+  depend.mail()          ++
   depend.testing()       ++
+  // time
+  depend.jodaConvert()   ++
   depend.time()          ++
-  depend.scalding()      ++
+  // logging
   depend.logging()       ++
   depend.scallop()       ++
-  depend.scrooge()       ++
-  depend.parquet()
+  depend.tsLogging()     ++
+  // databases
+  depend.hsqldb()        ++
+  depend.postgresql()    ++
+  depend.scalikejdbc()   ++
+  // others
+  depend.argonaut()      ++
+  depend.playJson()      ++
+  depend.semver()        ++
+  depend.tsConfig()
