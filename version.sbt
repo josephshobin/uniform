@@ -12,8 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-version in ThisBuild := "2.0.4"
+version in ThisBuild := "2.1.0"
 
-version in ThisBuild <<= (version in ThisBuild)(v => s"$v-SNAPSHOT") // We can't use LocalVersionPlugin here.
+version in ThisBuild := s"${(version in ThisBuild).value}-SNAPSHOT" // We can't use LocalVersionPlugin here.
 
 licenses := Seq("Apache License, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))

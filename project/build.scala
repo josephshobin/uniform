@@ -92,10 +92,10 @@ object build extends Build {
     unidocSettings ++ site.settings ++ Seq(
       site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
       includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.yml",
-      apiURL <<= baseDirectory(base => Some(url(s"https://commbank.github.io/${ base.getName }/latest/api"))),
-      scalacOptions in (ScalaUnidoc, unidoc) <++= (version, baseDirectory).map { (v, base) =>
+      apiURL := Some(url(s"https://commbank.github.io/${baseDirectory.value.getName}/latest/api")),
+      scalacOptions in (ScalaUnidoc, unidoc) := {
         val docSourceUrl = s"https://github.com/CommBank/uniform/blob/master/€{FILE_PATH}.scala"
-        Seq("-sourcepath", base.getAbsolutePath, "-doc-source-url", docSourceUrl)
+        Seq("-sourcepath", baseDirectory.value.getAbsolutePath, "-doc-source-url", docSourceUrl)
       }
     )
 
