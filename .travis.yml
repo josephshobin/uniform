@@ -16,7 +16,7 @@ script:
 - sbt test package scripted
   && ci/sbt-ci-deploy.sh ivy http://commbank.artifactoryonline.com/commbank ext-releases-local-ivy
   && ci/sbt-ci-build-doc-simple.sh
-  && ci/ci-push-branch.sh gh-pages
+  && if git rev-parse --verify refs/heads/gh-pages 2>&/dev/null; then ci/ci-push-branch.sh gh-pages; fi
 after_script:
 - rm -rf ci
 - find $HOME/.ivy2 -name "*uniform*" -delete
