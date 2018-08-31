@@ -82,11 +82,11 @@ object StandardProjectPlugin extends Plugin {
         docSourceUrl  := "https://github.com/CommBank",
         site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
         includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.yml",
-        apiURL := Some(url(s"${docRootUrl.value}/${baseDirectory.value}/latest/api")),
+        apiURL := Some(url(s"${docRootUrl.value}/${baseDirectory.value.getName}/latest/api")),
         scalacOptions in (ScalaUnidoc, unidoc) ++= {
           val urlSettings =
             GitInfo.commit(baseDirectory.value).hashOption.toSeq flatMap { h =>
-              Seq("-doc-source-url", s"${docSourceUrl.value}/${ baseDirectory.value }/tree/$h/€{FILE_PATH}.scala")
+              Seq("-doc-source-url", s"${docSourceUrl.value}/${baseDirectory.value.getName}/tree/$h/€{FILE_PATH}.scala")
             }
 
           Seq("-sourcepath", baseDirectory.value.getAbsolutePath) ++ urlSettings

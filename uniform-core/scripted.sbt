@@ -22,9 +22,7 @@ scriptedLaunchOpts := {
 
 scriptedBufferLog := false
 
-scriptedRun <<= {
-  scriptedRun.dependsOn((publishLocal in core))
-}
+scriptedRun := scriptedRun.dependsOn(publishLocal in core).value
 
 credentials ++= {
   val out = credentials.value.map {
