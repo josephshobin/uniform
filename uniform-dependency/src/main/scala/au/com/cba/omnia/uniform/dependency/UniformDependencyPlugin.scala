@@ -217,6 +217,7 @@ object UniformDependencyPlugin extends Plugin {
       def parquet       = s"${parquetBase}-cdh5.13.3"
       def parquetTools  = parquetBase
       def parquetFormat = "2.1.0-cdh5.13.3"
+      def sqoop         = "1.4.6-cdh5.13.3"
       def avro          = "1.7.6-cdh5.13.3"
       def zookeeper     = "3.4.5-cdh5.13.3"
       def jetty         = "6.1.26.cloudera.4"
@@ -237,6 +238,7 @@ object UniformDependencyPlugin extends Plugin {
       // non-hadoop modules
       def macroParadise = "2.1.0"
       def specs         = "3.6"
+      def scalazSpecs   = "0.4.0"
       def scalaz        = "7.1.1"  // Needs to align with what is required by specs2
       def scalazStream  = "0.7a"   // Needs to align with what is required by specs2
       def shapeless     = "2.2.5"
@@ -334,16 +336,21 @@ object UniformDependencyPlugin extends Plugin {
     def testing(
       specs: String = versions.specs, scalacheck: String = versions.scalacheck,
       scalaz: String = versions.scalaz, asm: String = versions.asm,
-      mockito: String = versions.mockito,
+      scalazSpecs: String = versions.scalazSpecs, mockito: String = versions.mockito,
       configuration: String = "test"
     ) = Seq(
       "org.mockito"              %  "mockito-all"                   % mockito     % configuration,
       "org.specs2"               %% "specs2-core"                   % specs       % configuration exclude("org.ow2.asm", "asm"),
-      "org.specs2"               %% "specs2-matcher-extra"          % specs       % configuration exclude("org.scala-lang.modules", "*"),
+      "org.specs2"               %% "specs2-matcher-extra"          % specs       % configuration exclude("org.scala-lang", "scala-compiler"),
       "org.specs2"               %% "specs2-mock"                   % specs       % configuration,
       "org.specs2"               %% "specs2-scalacheck"             % specs       % configuration exclude("org.ow2.asm", "asm") scalaExcludeAll("org.scalacheck", "scalacheck"),
       "org.scalacheck"           %% "scalacheck"                    % scalacheck  % configuration scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators"),
       "org.scalaz"               %% "scalaz-scalacheck-binding"     % scalaz      % configuration scalaExcludeAll("org.scalacheck", "scalacheck"),
+      "org.typelevel"            %% "scalaz-specs2"                 % scalazSpecs % configuration
+        scalaExcludeAll("org.scalaz",     "scalaz-core")
+        scalaExcludeAll("org.scalacheck", "scalacheck")
+        scalaExcludeAll("org.specs2",     "specs2-core")
+        scalaExcludeAll("org.specs2",     "specs2-scalacheck"),
       "asm"                      %  "asm"                           % asm         % configuration
     )
 
@@ -362,10 +369,11 @@ object UniformDependencyPlugin extends Plugin {
     )
 
     def scalikejdbc(scalikejdbc: String = versions.scalikejdbc) = Seq(
-      "org.scalikejdbc"          %% "scalikejdbc"                   % scalikejdbc
+      noHadoop("org.scalikejdbc" %% "scalikejdbc"                   % scalikejdbc)
         exclude("org.joda", "joda-convert")
-        scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators")
-    ) map noHadoop
+        scalaExcludeAll("org.scala-lang.modules", "scala-parser-combinators"),
+      "org.scalikejdbc"          %% "scalikejdbc-test"              % scalikejdbc % "test"
+    )
 
     def parquetTools(parquetTools: String = versions.parquetTools) = Seq(
       "com.twitter"              % "parquet-tools"                  % parquetTools
@@ -390,6 +398,11 @@ object UniformDependencyPlugin extends Plugin {
     def scrooge(scrooge: String = versions.scrooge, bijection: String = versions.bijection) = Seq(
       "com.twitter"              %% "scrooge-core"                  % scrooge,
       "com.twitter"              %% "bijection-scrooge"             % bijection scalaExcludeAll("com.twitter", "scrooge-core")
+    ) map noHadoop
+
+    def sqoop(version: String = versions.sqoop) = Seq(
+      "org.apache.sqoop"         %  "sqoop"                         % version
+        exclude("hsqldb", "hsqldb")
     ) map noHadoop
 
     def parquet(version: String = versions.parquet) = Seq(

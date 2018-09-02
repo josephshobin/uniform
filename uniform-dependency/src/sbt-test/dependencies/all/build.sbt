@@ -27,6 +27,7 @@ libraryDependencies ++=
   depend.parquetTools()  ++
   depend.scalding()      ++
   depend.scrooge()       ++
+  depend.sqoop()         ++
   // fp
   depend.scalaz()        ++
   depend.scalazStream()  ++
