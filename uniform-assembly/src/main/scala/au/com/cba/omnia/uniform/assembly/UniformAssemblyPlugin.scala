@@ -24,7 +24,7 @@ object UniformAssemblyPlugin extends Plugin {
 
   /** Adds an assembly that includes all dependencies, optionally split into two assemblies (thin and deps). */
   def uniformAssemblySettings(splitPackageDeps: Boolean = false): Seq[Sett] = Seq(
-      assemblyMergeStrategy in assembly <<= (assemblyMergeStrategy in assembly)(defaultMergeStrategy),
+      assemblyMergeStrategy in assembly := defaultMergeStrategy((assemblyMergeStrategy in assembly).value),
       test in assembly := {}
     ) ++ (
       if (splitPackageDeps) splitAssemblySettings
@@ -42,9 +42,7 @@ object UniformAssemblyPlugin extends Plugin {
   // Set a classifier and corresponding jarName for an assembly, overriding the the sbt-assembly naming.
   def classifierNamingSettings(aClassifier: String, anAssembly: TaskKey[File]) = Seq(
     artifact in (Compile, anAssembly) ~= { _.copy(`classifier` = Some(aClassifier)) },
-    assemblyJarName in anAssembly <<= (name, scalaBinaryVersion, version) map {
-      (nm, sv, ver) => s"${nm}_${sv}-${ver}-${aClassifier}.jar"
-    }
+    assemblyJarName in anAssembly := s"${name.value}_${scalaBinaryVersion.value}-${version.value}-${aClassifier}.jar"
   )
 
   def defaultMergeStrategy(old: String => MergeStrategy) =  (path: String) => path match {

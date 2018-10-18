@@ -1,10 +1,17 @@
 package au.com.cba.omnia.uniform.dependency
 
-import sbt.ModuleID
+import sbt.{ExclusionRule, ModuleID}
 
 import au.com.cba.omnia.uniform.core.scala
 
 class ModuleIDOps(module: ModuleID) {
+  /**
+    * Exclude a module’s transitive package dependencies by organization and name.
+    */
+  def excludeAll(exclusions: Seq[ModuleID]): ModuleID =
+    module.copy(exclusions = module.exclusions ++
+      exclusions.map(m => ExclusionRule(m.organization, m.name)))
+
   /**
     * Exclude packages for all scala binary versions.
     *
