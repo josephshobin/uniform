@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package au.com.cba.omnia.uniform.core.scala
 object Scala11  {
   val version       = "2.11.8"
   val binaryVersion = version.substring(0, version.lastIndexOf('.'))
-  val jvmVersion    = "1.7"
+  val jvmVersion    = "1.8"
 }
 
 object Scala12 {
