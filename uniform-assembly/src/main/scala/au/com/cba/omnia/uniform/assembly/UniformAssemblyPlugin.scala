@@ -39,6 +39,60 @@ object UniformAssemblyPlugin extends Plugin {
     classifierNamingSettings("deps", assemblyPackageDependency) ++
     addArtifact(artifact in (Compile, assemblyPackageDependency), assemblyPackageDependency)
 
+  /**
+    * This method allows a subproject to re-use a previously-built subproject’s
+    * split assembly package dependency jar, if the libraryDependencies and
+    * dependencyOverrides are the same.
+    * For example, an RPM built with these settings will contain `baseProject-deps.jar`
+    * instead of `project-deps.jar`.
+    * @param project the subproject that may re-use a `-deps.jar`
+    * @param baseProject the subproject already built with the required `-deps.jar`
+    */
+  def shareSplitAssemblyPackageDependencyJar(project: Project, baseProject: Project): Project = project.settings(
+    assemblyPackageDependency := {
+      val s = (streams in assemblyPackageDependency).value
+
+      // Helper method to deal with CrossVersion.Full equality issue (affects scala macro paradise)
+      val fullSingleton = CrossVersion.full
+      def comparableModule(mid: ModuleID): ModuleID =
+        mid.copy(crossVersion = mid.crossVersion match {
+          case f: CrossVersion.Full => fullSingleton
+          case other => other
+        })
+
+      // Check if project uses the same libraryDependencies and dependencyOverrides as baseProject
+      val baseDeps = (libraryDependencies in baseProject).value.map(comparableModule)
+      val baseOverrides = (dependencyOverrides in baseProject).value.map(comparableModule)
+      val currentDeps = (libraryDependencies in project).value.map(comparableModule)
+      val currentOverrides = (dependencyOverrides in project).value.map(comparableModule)
+
+      if (baseDeps == currentDeps && baseOverrides == currentOverrides) {
+        // Use pre-build base deps assembly (saves a lot of time when building many subprojects)
+        s.log.info(s"assemblyPackageDependency: Re-using ${baseProject.id} deps assembly for ${project.id}")
+        (assemblyOutputPath in assemblyPackageDependency in baseProject).value
+      } else {
+        // Build our own deps assembly.
+        s.log.info(s"assemblyPackageDependency: Building custom deps assembly for ${project.id}")
+        // Note: Unfortunately can’t simply use `assemblyPackageDependency.value` here.
+        // This is because SBT strictly evaluates .value even if the result is unused!
+        // Instead, here is the upstream code from `def assemblyTask` and `assembledMappings` in the plugin
+        // https://github.com/sbt/sbt-assembly/blob/master/src/main/scala/sbtassembly/Assembly.scala#L240
+        // This prevents SBT from re-running the assembly steps ("Including", "Merging") for every subproject.
+        val assembledMappings = sbtassembly.Assembly.assembleMappings(
+          (fullClasspath in assembly).value,
+          (externalDependencyClasspath in assembly).value,
+          (assemblyOption in assemblyPackageDependency).value,
+          s.log
+        )
+        Assembly(
+          (assemblyOutputPath in assemblyPackageDependency).value, (assemblyOption in assemblyPackageDependency).value,
+          (packageOptions in assemblyPackageDependency).value, assembledMappings,
+          s.cacheDirectory, s.log
+        )
+      }
+    }
+  )
+
   // Set a classifier and corresponding jarName for an assembly, overriding the the sbt-assembly naming.
   def classifierNamingSettings(aClassifier: String, anAssembly: TaskKey[File]) = Seq(
     artifact in (Compile, anAssembly) ~= { _.copy(`classifier` = Some(aClassifier)) },
