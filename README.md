@@ -147,6 +147,27 @@ Optional usage with `uniformAssemblySettings(splitPackageDeps = true)`:
 
 In this case, the `deps` jar can be passed to [Hadoop’s `-libjars`](https://hadoop.apache.org/docs/r2.6.0/hadoop-project-dist/hadoop-common/CommandsManual.html#Generic_Options) option to avoid unjarring the dependencies in a traditional fat assembly.
 
+### Sharing assemblyPackageDependency deps.jar between subprojects
+
+If you are using splitPackageDeps in a repo with many subprojects sharing the same libraryDependencies,
+you can re-use the deps.jar (instead of independently re-building it in each subproject).
+This can save time and disk usage during the builds.
+As of version 2.3.0 (December 2018), `uniform-assembly` supports a convenience method for this:
+
+`build.sbt`
+
+```
+...
+lazy val all = (project in file(".")).settings(
+  ...
+).aggregate(sub1, sub2)
+
+lazy val sub1 = project in file("sub1")
+
+lazy val sub2 = shareSplitAssemblyPackageDependencyJar(project in file("sub2"), sub1)
+...
+```
+
 docs
 ----
 
