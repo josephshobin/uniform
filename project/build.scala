@@ -36,7 +36,7 @@ object build extends Build {
       , "-Xfatal-warnings"
       , "-feature"
       , "-language:_"
-      , "-target:jvm-1.7"
+      , "-target:jvm-1.8"
       )
     , updateOptions := updateOptions.value.withCachedResolution(true)
     ) ++ docSettings
