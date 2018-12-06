@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ object build extends Build {
     Defaults.coreDefaultSettings ++ Seq[Sett](
       organization := "au.com.cba.omnia"
     , sbtPlugin := true
-    , scalaVersion := "2.10.6"
+    , scalaVersion := "2.10.7"
     , scalacOptions := Seq(
         "-deprecation"
       , "-unchecked"
@@ -36,7 +36,7 @@ object build extends Build {
       , "-Xfatal-warnings"
       , "-feature"
       , "-language:_"
-      , "-target:jvm-1.7"
+      , "-target:jvm-1.8"
       )
     , updateOptions := updateOptions.value.withCachedResolution(true)
     ) ++ docSettings

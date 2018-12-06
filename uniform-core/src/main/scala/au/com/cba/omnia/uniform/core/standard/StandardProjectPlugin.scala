@@ -1,4 +1,4 @@
-//   Copyright 2014 Commonwealth Bank of Australia
+//   Copyright 2014-2018 Commonwealth Bank of Australia
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ object StandardProjectPlugin extends Plugin {
 
     /** Adds settings for crossbuilding against Scala 2.10. */
     def crossBuild = Seq(
-      crossScalaVersions := Seq(scalaVersion.value, "2.10.6"),
+      crossScalaVersions := Seq(scalaVersion.value, "2.10.7"),
       scalacOptions      := scalacOptions.value.filter(o =>
         !(scalaBinaryVersion.value == "2.10" && o == "-Ywarn-unused-import")
       )
